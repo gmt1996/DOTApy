@@ -110,13 +110,13 @@ def data():
                 a = (driver.current_url,)
                 try:
                     connection = mysql.connector.connect(host='localhost',
-                                                        database='prova',
+                                                        database='booking',
                                                         user='root',
                                                         password='rootroot')
                     time.sleep(3)
                     #a = (driver.current_url)
 
-                    mySql_insert_query = """INSERT INTO urlht (url)
+                    mySql_insert_query = """INSERT INTO urlHotel (url)
                            VALUES
                            (%s) """
 
