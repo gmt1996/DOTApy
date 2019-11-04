@@ -10,7 +10,7 @@ from selenium.common.exceptions import WebDriverException as WDE
 from selenium.common import exceptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+import sys
 
 
 driver = webdriver.Chrome('/Users/matteogiannettoni/Desktop/scraper/chromedriver')
@@ -19,8 +19,8 @@ driver.get('https://www.booking.com/index.it.html?aid=376372;label=it-5Srxg0e1tw
 
 z = 1
 mesi = ["dicembre 2019", "gennaio 2020", "febbraio 2020", "marzo 2020", "aprile 2020", "maggio 2020", "giugno 2020", "luglio 2020", "agosto 2020", "settembre 2020", "ottobre 2020", "novembre 2020"]
-cont = 7
-def data():
+cont = 0
+def data(inpu):
     #driver.refresh()
     #leva i coockie
     try:
@@ -71,6 +71,7 @@ def data():
                 cont = cont + 1
                 z = 0
                 passo3.click()
+                return
 
 
 
@@ -85,7 +86,7 @@ def data():
                 print("si" )
                 #print(i)
                 passo0 = driver.find_element_by_class_name('c-autocomplete__input')
-                passo0.send_keys("pisa")
+                passo0.send_keys(inpu)
 
 
                 #diminuisce di uno gli adulti
@@ -108,20 +109,23 @@ def data():
                 cerca = driver.find_element_by_class_name('xp__button')
                 cerca.click()
                 a = (driver.current_url,)
+                date = driver.find_element_by_xpath('//*[@id="frm"]/div[3]/div/div[1]/div[1]/div/div/div[1]/div/div[2]').text
+                b = (date,)
+                c = inpu
                 try:
                     connection = mysql.connector.connect(host='localhost',
-                                                        database='booking',
+                                                        database='prova',
                                                         user='root',
                                                         password='rootroot')
                     time.sleep(3)
                     #a = (driver.current_url)
 
-                    mySql_insert_query = """INSERT INTO urlHotel (url)
+                    mySql_insert_query = """INSERT INTO urlHotel1 (url, data, city)
                            VALUES
-                           (%s) """
+                           (%s, %s, %s) """
 
                     cursor = connection.cursor()
-                    result = cursor.execute(mySql_insert_query, a)
+                    result = cursor.execute(mySql_insert_query, (a[0], b[0], c))
                     connection.commit()
                     print("Record inserted successfully into urlht table")
                     cursor.close()
@@ -159,4 +163,4 @@ def data():
 
 
 for i in range(0,11):
-    data()
+    data(sys.argv[1])
