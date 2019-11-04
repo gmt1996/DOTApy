@@ -1,4 +1,4 @@
-#estrae nome hotel e prezzo di tutte le pagine per un giorno
+#estrae nome hotel e prezzo di tutte le pagine per un anno
 ##funziona in modalita headless con firefox eventualmente per server
 import time
 from selenium import webdriver
@@ -10,11 +10,11 @@ import mysql.connector
 from mysql.connector import Error
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 
-prox = Proxy()
-prox.proxy_type = ProxyType.MANUAL
-prox.http_proxy = "ip_addr:port"
-prox.socks_proxy = "ip_addr:port"
-prox.ssl_proxy = "ip_addr:port"
+#prox = Proxy()
+#prox.proxy_type = ProxyType.MANUAL
+#prox.http_proxy = "ip_addr:port"
+#prox.socks_proxy = "ip_addr:port"
+#prox.ssl_proxy = "ip_addr:port"
 
 
 options = Options()
@@ -45,7 +45,7 @@ try:
     #trova hotel e prezzi
     def trovaHtPr():
         ht = driver.find_element_by_xpath('//*[@id="hotellist_inner"]')
-        numHt = driver.find_elements_by_class_name('sr_item')
+        numHt = ht.find_elements_by_class_name('sr_item')
         print(len(numHt))
         for i in range(0, len(numHt)):
             o = numHt[i].find_element_by_class_name('sr-hotel__name').text
@@ -143,9 +143,9 @@ try:
                 time.sleep(4)
             except WDE:
                 print("stop")
-        trovaHtPr()
+
     except WDE:
-       print('err')
+       trovaHtPr()
             #for i in range(0,len(passo1)):
             #    if(passo1[i].get_attribute('class')==h[0].get_attribute('class')):
             #        print('no'+passo1[i].text)
