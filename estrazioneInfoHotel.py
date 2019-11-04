@@ -4,11 +4,14 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException as WDE
+import mysql.connector
+from mysql.connector import Error
 
 driver = webdriver.Chrome('/Users/matteogiannettoni/Desktop/scraper/chromedriver')
 
-a = driver.get('https://www.booking.com/searchresults.it.html?aid=397594&label=gog235jc-1FCAEoggI46AdIM1gDaHGIAQGYARS4AQfIAQzYAQHoAQH4AQyIAgGoAgO4AsCrnu0FwAIB&sid=1a7eec527f46b9d43c5486f437bdc452&sb=1&src=index&src_elem=sb&error_url=https%3A%2F%2Fwww.booking.com%2Findex.it.html%3Faid%3D397594%3Blabel%3Dgog235jc-1FCAEoggI46AdIM1gDaHGIAQGYARS4AQfIAQzYAQHoAQH4AQyIAgGoAgO4AsCrnu0FwAIB%3Bsid%3D1a7eec527f46b9d43c5486f437bdc452%3Bsb_price_type%3Dtotal%26%3B&ss=Pisa%2C+Toscana%2C+Italia&is_ski_area=0&checkin_monthday=9&checkin_month=12&checkin_year=2019&checkout_monthday=10&checkout_month=12&checkout_year=2019&group_adults=1&group_children=0&no_rooms=1&b_h4u_keep_filters=&from_sf=1&ss_raw=pisa&ac_position=0&ac_langcode=it&ac_click_type=b&dest_id=-124918&dest_type=city&iata=PSA&place_id_lat=43.716358&place_id_lon=10.402089&search_pageview_id=9be35f3b10af012e&search_selected=true')
+a = driver.get('https://www.booking.com/searchresults.it.html?aid=376372&label=it-5Srxg0e1twJI_ryrey2UnQS267778030990%3Apl%3Ata%3Ap1%3Ap22.537.000%3Aac%3Aap1t1%3Aneg%3Afi%3Atikwd-65526620%3Alp1008645%3Ali%3Adec%3Adm&sid=b04ba1a9b8c54b39542699416c8b40b5&tmpl=searchresults&ac_click_type=b&ac_position=0&checkin_year_month_monthday=2019-12-01&checkout_year_month_monthday=2019-12-02&class_interval=1&dest_id=-124918&dest_type=city&from_sf=1&group_adults=1&group_children=0&iata=PSA&label_click=undef&no_rooms=1&raw_dest_type=city&room1=A&sb_price_type=total&search_selected=1&shw_aparth=1&slp_r_match=0&src=index&srpvid=76536e1242fa01da&ss=Pisa%2C%20Toscana%2C%20Italia&ss_raw=pisa&ssb=empty&top_ufis=1&rdf=')
 a
+NomeHote = 'a'
 main_page = driver.current_window_handle
 def entraHotel():
     #main_page = driver.current_window_handle
@@ -16,8 +19,13 @@ def entraHotel():
     #se indentato apre tutte le pagine degli hotel
     for i in range(0,len(numHt)):
         s = numHt[i].find_element_by_class_name('sr-hotel__name')
+
+        pi = numHt[i].find_element_by_class_name('sr-hotel__name').text
+        global NomeHote
+        NomeHote = (pi,)
         s.click()
-        print(numHt[i].find_element_by_class_name('sr-hotel__name').text)
+
+        #print(numHt[i].find_element_by_class_name('sr-hotel__name').text)
         estrazioneInfoHotel()
         time.sleep(1)
     time.sleep(3)
@@ -60,6 +68,8 @@ def estrazioneInfoHotel():
         print("no nome")
 
     #prende tutti indirizzo
+    indirizz = driver.find_element_by_class_name('hp_address_subtitle').text
+    indiri = (indirizz, )
     try:
         indirizzo = driver.find_element_by_class_name('hp_address_subtitle')
         print(indirizzo.text)
@@ -69,7 +79,9 @@ def estrazioneInfoHotel():
     #reperisce tutte le cose che piacciono di più ai vistatori
     try:
         pazziper = driver.find_elements_by_class_name('important_facility')
+        pazzi = ' '
         for i in range(0,len(pazziper)//2):
+            pazzi = pazzi + pazziper[i].text + ', '
             print(pazziper[i].text)
     except WDE:
         print("err pazzi per")
@@ -77,7 +89,9 @@ def estrazioneInfoHotel():
     #estrae tutte le recensioni caricate sulla pagina
     try:
         recensioni = driver.find_elements_by_class_name('c-review__body')
+        recen = ''
         for i in range(0,len(recensioni)):
+            recen = recen + recensioni[i].text + '; '
             print(recensioni[i].text)
     except WDE:
         print("err recensioni")
@@ -85,7 +99,9 @@ def estrazioneInfoHotel():
     #estare i buoni motivi per scegliere la struttura
     try:
         motivi3 = driver.find_elements_by_class_name('oneusp')
+        mot = ''
         for i in range(0,len(motivi3)):
+            mot = mot + motivi3[i].text + '; '
             print(motivi3[i].text)
     except WDE:
         print("err recensioni")
@@ -99,12 +115,40 @@ def estrazioneInfoHotel():
             h5 = checklistSection[i].find_element_by_tag_name('h5')
             #tit = checklistSection[i].find_element_by_class_name('faciliesGroupIcon').text
             print(h5.text)
+            ele = ''
             for j in range(0,1):
                 elementi = checklistSection[i].find_element_by_tag_name('ul').text
+                ele = ele + elementi +'; '
                 print(elementi)
     except WDE:
         print("err recensioni")
+    try:
+        connection = mysql.connector.connect(host='localhost',
+                                            database='prova',
+                                            user='root',
+                                            password='rootroot')
+        time.sleep(3)
+        #a = (driver.current_url)
 
+        mySql_insert_query = """INSERT INTO accomodation (NomeHotel, indirizzo, pazziPer, recensioni, motivi, servizi)
+               VALUES
+               (%s, %s, %s, %s, %s, %s) """
+
+        cursor = connection.cursor()
+        global NomeHote
+        result = cursor.execute(mySql_insert_query, (NomeHote[0], indiri[0], pazzi, recen, mot, ele))
+        connection.commit()
+        print("Record inserted successfully into urlht table")
+        cursor.close()
+
+    except mysql.connector.Error as error:
+        print("Failed to insert record into urlht table {}".format(error))
+
+    finally:
+        if (connection.is_connected()):
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed")
 
     driver.close()
     driver.switch_to.window(main_page)
