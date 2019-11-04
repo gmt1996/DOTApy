@@ -10,11 +10,11 @@ import mysql.connector
 from mysql.connector import Error
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 
-#prox = Proxy()
-#prox.proxy_type = ProxyType.MANUAL
-#prox.http_proxy = "ip_addr:port"
-#prox.socks_proxy = "ip_addr:port"
-#prox.ssl_proxy = "ip_addr:port"
+prox = Proxy()
+prox.proxy_type = ProxyType.MANUAL
+prox.http_proxy = "ip_addr:port"
+prox.socks_proxy = "ip_addr:port"
+prox.ssl_proxy = "ip_addr:port"
 
 
 options = Options()
