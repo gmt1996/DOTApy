@@ -111,11 +111,12 @@ def estrazioneInfoHotel():
         #checklist = driver.find_element_by_class_name('facilitiesChecklist')
         checklistSection = driver.find_elements_by_class_name('facilitiesChecklistSection')
         print(len(checklistSection))
+        ele = ''
         for i in range(0,len(checklistSection)):
             h5 = checklistSection[i].find_element_by_tag_name('h5')
             #tit = checklistSection[i].find_element_by_class_name('faciliesGroupIcon').text
             print(h5.text)
-            ele = ''
+
             for j in range(0,1):
                 elementi = checklistSection[i].find_element_by_tag_name('ul').text
                 ele = ele + elementi +'; '

@@ -36,7 +36,7 @@ mycursor = mydb.cursor()
 mycursor.execute("SELECT url FROM urlhotel")
 myresult = mycursor.fetchall()
 mycursor.close()
-mydb.close()
+#mydb.close()
 beta = 1
 try:
  for i in myresult:
@@ -64,12 +64,6 @@ try:
                     p = (t,)
 
                 try:
-                    mydb = mysql.connector.connect(
-                            host = "localhost",
-                            user = "root",
-                            passwd = "rootroot",
-                            database = "booking"
-                           )
                     mySql_insert_query = """INSERT INTO nomeprezzohotel (NomeHotel,PrezzoHotel)
                            VALUES
                            (%s,%s) """
@@ -85,7 +79,7 @@ try:
                 finally:
                     if (mydb.is_connected()):
                         cursor.close()
-                        mydb.close()
+                        #mydb.close()
                         #print("MySQL connection is closed")
             #inserire(s, p)
             #inserire(p)
@@ -154,3 +148,4 @@ try:
     beta = beta + 1
 except WDE:
     print("probabile errore di rete per il giorno ")
+mydb.close()
