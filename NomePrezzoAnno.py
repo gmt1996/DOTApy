@@ -9,6 +9,7 @@ from selenium.webdriver.firefox.options import Options
 import mysql.connector
 from mysql.connector import Error
 from selenium.webdriver.common.proxy import Proxy, ProxyType
+import datetime
 
 prox = Proxy()
 prox.proxy_type = ProxyType.MANUAL
@@ -21,7 +22,7 @@ options = Options()
 options.headless = True
 driver = webdriver.Firefox(executable_path = '/Users/matteogiannettoni/Desktop/scraper/geckodriver', options=options, )
 
-
+giorno = (datetime.date.today(), )
 
 
 
@@ -30,10 +31,10 @@ mydb = mysql.connector.connect(
     host = "localhost",
     user = "root",
     passwd = "rootroot",
-    database = "booking"
+    database = "prova"
    )
 mycursor = mydb.cursor()
-mycursor.execute("SELECT url FROM urlhotel")
+mycursor.execute("SELECT url, data FROM urlhotel1")
 myresult = mycursor.fetchall()
 mycursor.close()
 #mydb.close()
@@ -42,6 +43,7 @@ try:
  for i in myresult:
     print(beta)
     driver.get(i[0])
+    d = (i[1],)
     #trova hotel e prezzi
     def trovaHtPr():
         ht = driver.find_element_by_xpath('//*[@id="hotellist_inner"]')
@@ -50,6 +52,7 @@ try:
         for i in range(0, len(numHt)):
             o = numHt[i].find_element_by_class_name('sr-hotel__name').text
             s = (o,)
+
             if(numHt[i].find_elements_by_class_name("fe_banner__title")):
                 t ="€ 0"
                 p = (t,)
@@ -62,14 +65,14 @@ try:
                 except WDE:
                     t = numHt[i].find_element_by_class_name('bui-price-display__value').text
                     p = (t,)
-
                 try:
-                    mySql_insert_query = """INSERT INTO nomeprezzohotel (NomeHotel,PrezzoHotel)
+                    global giorno
+                    mySql_insert_query = """INSERT INTO nomeprezzodatahotel (NomeHotel,PrezzoHotel, dataSoggiorno, dataRicerca)
                            VALUES
-                           (%s,%s) """
+                           (%s,%s,%s,%s) """
 
                     cursor = mydb.cursor()
-                    result = cursor.execute(mySql_insert_query, (s[0],p[0]))
+                    result = cursor.execute(mySql_insert_query, (s[0],p[0],d[0],giorno[0]))
                     mydb.commit()
                     cursor.close()
 
@@ -79,17 +82,6 @@ try:
                 finally:
                     if (mydb.is_connected()):
                         cursor.close()
-                        #mydb.close()
-                        #print("MySQL connection is closed")
-            #inserire(s, p)
-            #inserire(p)
-            #print(s +" : "+ p)
-        #hts = ht.find_elements_by_class_name('sr-hotel__name')
-        #print(hts[0].text)
-
-
-    # a = driver.current_url
-
 
     def seleziona5km():
         try:
@@ -102,8 +94,6 @@ try:
             coo1.click()
         except WDE:
             print("Not able to find element")
-        #imposta la distanza a un km
-        #km1 = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[1]/label/div')
         try:
             km = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[3]/label/div')
             time.sleep(2)
@@ -114,15 +104,10 @@ try:
     time.sleep(2)
     seleziona5km()
     time.sleep(2)
-    #for i in range(0,7):
     try:
         while(driver.find_element_by_xpath('//*[@id="search_results_table"]/div[4]/nav/ul/li[3]/a')):
             try:
-                #a = driver.current_url
                 trovaHtPr()
-                #if(driver.find_element_by_xpath('//*[@id="search_results_table"]/div[4]/nav/ul/li[3]/a').get_attribute('title')!="pagina successiva"):
-                #    print("basta")
-                #    break
                 try:
                     coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
                     coo.click()
@@ -140,12 +125,7 @@ try:
 
     except WDE:
        trovaHtPr()
-            #for i in range(0,len(passo1)):
-            #    if(passo1[i].get_attribute('class')==h[0].get_attribute('class')):
-            #        print('no'+passo1[i].text)
-            #    else:
-            #        print('s'+passo1[i].text)
     beta = beta + 1
 except WDE:
-    print("probabile errore di rete per il giorno ")
+    print("probabile errore di rete")
 mydb.close()
