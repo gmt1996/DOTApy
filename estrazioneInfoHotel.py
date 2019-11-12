@@ -14,7 +14,7 @@ a
 NomeHote = 'a'
 main_page = driver.current_window_handle
 connection = mysql.connector.connect(host='localhost',
-                                    database='prova',
+                                    database='ota',
                                     user='root',
                                     password='rootroot')
 time.sleep(3)
@@ -110,14 +110,14 @@ def estrazioneInfoHotel():
     except WDE:
         print("err recensioni")
     try:
-        l=re.findall(r'https://www\.booking\.com/hotel/it/(?:\w*-?\w*)+\.it\.html', driver.current_url)
+        l=re.findall(r'(h.*)\?', driver.current_url)
         x= l[0]
         hturl = (x,)
     except WDE:
         print("err recensioni")
     try:
 
-        mySql_insert_query = """INSERT INTO accomodation2 (NomeHotel, indirizzo, pazziPer, recensioni, motivi, url)
+        mySql_insert_query = """INSERT INTO accomodation (NomeHotel, indirizzo, pazziPer, recensioni, motivi, url)
                VALUES
                (%s, %s, %s, %s, %s, %s) """
 
@@ -129,7 +129,7 @@ def estrazioneInfoHotel():
         cursor.close()
 
     except mysql.connector.Error as error:
-        print("Failed to insert record into accomodati table {}".format(error))
+        print("Failed to insert record into accomodation table {}".format(error))
     #estrae tutte le categorie e per ognuna le sue info
     try:
         checklistSection = driver.find_elements_by_class_name('facilitiesChecklistSection')

@@ -114,13 +114,13 @@ def data(inpu):
                 c = inpu
                 try:
                     connection = mysql.connector.connect(host='localhost',
-                                                        database='prova',
+                                                        database='ota',
                                                         user='root',
                                                         password='rootroot')
                     time.sleep(3)
                     #a = (driver.current_url)
 
-                    mySql_insert_query = """INSERT INTO urlHotel1 (url, data, city)
+                    mySql_insert_query = """INSERT INTO urlHotel (url, data, citta)
                            VALUES
                            (%s, %s, %s) """
 
