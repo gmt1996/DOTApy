@@ -6,10 +6,10 @@ Applicazione estrazione automatica dei dati
 3)mysql connector
 4)re
 5)driver Chrome, driver Mozzilla
-## strumento per database
+## Strumento per database
 MYSQLWorkbench
-## procedimento
-1)inserire tabelle in database utilizzando il file 'tabelleota.sql' nella cartella 'tabelle'
+## Procedimento
+1)inserire tabelle in database utilizzando il file 'tabelleota.sql' nella cartella 'tabelle' \n
 2)inserire alla riga 16 il vostro path del driver Chrome. successivamente fate girare file 'estrazioneUrl.py' inserendo in input la città desiderata
 es: python3 estrazioneUrl.py Pisa. attendere la fine dell'esecuzione.
 3)recuperati gli url, inserire alla riga 10 il vostro path del driver Chrome. Eseguire il programma 'estrazioneInfoHotel.py' che permette di reperire tutte le info necessarie sugli hotel
