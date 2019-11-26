@@ -1,11 +1,13 @@
 # Scraper ota
 Applicazione estrazione automatica dei dati
 ## Requisiti
-- python3
+Usare python3
+Installare le librerie
 - selenium
 - mysql connector
 - re
-- driver Chrome, driver Mozzilla
+Scaricare un driver per i browser Chrome e Mozilla
+
 ## Strumento per database
 MYSQLWorkbench
 ## Procedimento
