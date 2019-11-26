@@ -2,10 +2,13 @@
 Applicazione estrazione automatica dei dati
 ## Requisiti
 Usare python3
+
 Installare le librerie
+
 - selenium
 - mysql connector
 - re
+
 Scaricare un driver per i browser Chrome e Mozilla
 
 ## Strumento per database
