@@ -9,7 +9,7 @@ from mysql.connector import Error
 import re
 driver = webdriver.Chrome('/Users/matteogiannettoni/Desktop/scraper/chromedriver')
 
-a = driver.get('https://www.booking.com/searchresults.it.html?aid=376372&label=it-5Srxg0e1twJI_ryrey2UnQS267778030990%3Apl%3Ata%3Ap1%3Ap22.537.000%3Aac%3Aap1t1%3Aneg%3Afi%3Atikwd-65526620%3Alp1008645%3Ali%3Adec%3Adm&sid=b04ba1a9b8c54b39542699416c8b40b5&tmpl=searchresults&ac_click_type=b&ac_position=0&checkin_year_month_monthday=2019-12-01&checkout_year_month_monthday=2019-12-02&class_interval=1&dest_id=-124918&dest_type=city&from_sf=1&group_adults=1&group_children=0&iata=PSA&label_click=undef&no_rooms=1&raw_dest_type=city&room1=A&sb_price_type=total&search_selected=1&shw_aparth=1&slp_r_match=0&src=index&srpvid=76536e1242fa01da&ss=Pisa%2C%20Toscana%2C%20Italia&ss_raw=pisa&ssb=empty&top_ufis=1&rdf=')
+a = driver.get('https://www.booking.com/searchresults.it.html?aid=376372&label=it-3aOU9G8CnPp3k4iv4SLQrwS267778030993%3Apl%3Ata%3Ap1%3Ap22.538.000%3Aac%3Aap1t1%3Aneg%3Afi%3Atikwd-298012084940%3Alp1008645%3Ali%3Adec%3Adm&sid=d609fa4cf73aa79faad84de2c1edf6e7&sb=1&src=index&src_elem=sb&error_url=https%3A%2F%2Fwww.booking.com%2Findex.it.html%3Faid%3D376372%3Blabel%3Dit-3aOU9G8CnPp3k4iv4SLQrwS267778030993%253Apl%253Ata%253Ap1%253Ap22.538.000%253Aac%253Aap1t1%253Aneg%253Afi%253Atikwd-298012084940%253Alp1008645%253Ali%253Adec%253Adm%3Bsid%3Dd609fa4cf73aa79faad84de2c1edf6e7%3Bsb_price_type%3Dtotal%26%3B&ss=Pisa&is_ski_area=0&ssne=Pisa&ssne_untouched=Pisa&dest_id=-124918&dest_type=city&checkin_year=&checkin_month=&checkout_year=&checkout_month=&group_adults=2&group_children=0&no_rooms=1&b_h4u_keep_filters=&from_sf=1')
 a
 NomeHote = 'a'
 main_page = driver.current_window_handle
