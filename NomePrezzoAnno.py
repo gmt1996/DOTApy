@@ -10,6 +10,7 @@ import mysql.connector
 from mysql.connector import Error
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 import datetime
+import re
 
 prox = Proxy()
 prox.proxy_type = ProxyType.MANUAL
@@ -55,17 +56,19 @@ try:
                 s = (o,)
 
                 if(numHt[i].find_elements_by_class_name("fe_banner__title")):
-                    t ="€ 0"
+                    t =0
                     p = (t,)
 
                 else:
                     try:
                         if(numHt[i].find_element_by_class_name('tpi_price_label.tpi_price_label__orange')):
                             t= numHt[i].find_element_by_class_name('tpi_price_label.tpi_price_label__orange').text
-                            p = (t,)
+                            num = re.findall(r'(\d+)', t)
+                            p = (num[0],)
                     except WDE:
                         t = numHt[i].find_element_by_class_name('bui-price-display__value').text
-                        p = (t,)
+                        num = re.findall(r'(\d+)', t)
+                        p = (num[0],)
                     try:
                         global giorno
                         mySql_insert_query = """INSERT INTO accomodationprice (NomeHotel,PrezzoHotel, dataSoggiorno, dataRicerca)
