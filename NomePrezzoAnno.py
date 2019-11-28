@@ -32,10 +32,10 @@ mydb = mysql.connector.connect(
     host = "localhost",
     user = "root",
     passwd = "rootroot",
-    database = "ota"
+    database = "o.t.a."
    )
 mycursor = mydb.cursor()
-mycursor.execute("SELECT url, data FROM urlhotel")
+mycursor.execute("SELECT url, data, citta FROM urlhotel")
 myresult = mycursor.fetchall()
 mycursor.close()
 #mydb.close()
@@ -45,6 +45,7 @@ try:
     print(beta)
     driver.get(i[0])
     d = (i[1],)
+    kk = (i[2],)
     try:
         #trova hotel e prezzi
         def trovaHtPr():
@@ -71,12 +72,12 @@ try:
                         p = (num[0],)
                     try:
                         global giorno
-                        mySql_insert_query = """INSERT INTO accomodationprice (NomeHotel,PrezzoHotel, dataSoggiorno, dataRicerca)
+                        mySql_insert_query = """INSERT INTO accomodationprice (NomeHotel,PrezzoHotel, dataSoggiorno, dataRicerca, CittaHotel)
                                VALUES
-                               (%s,%s,%s,%s) """
+                               (%s,%s,%s,%s,%s) """
 
                         cursor = mydb.cursor()
-                        result = cursor.execute(mySql_insert_query, (s[0],p[0],d[0],giorno[0]))
+                        result = cursor.execute(mySql_insert_query, (s[0],p[0],d[0],giorno[0],kk[0]))
                         mydb.commit()
                         cursor.close()
 

@@ -110,11 +110,12 @@ def data(inpu):
                 cerca.click()
                 a = (driver.current_url,)
                 date = driver.find_element_by_xpath('//*[@id="frm"]/div[3]/div/div[1]/div[1]/div/div/div[1]/div/div[2]').text
-                b = (date,)
+                format = funData(date)
+                b = (format,)
                 c = inpu
                 try:
                     connection = mysql.connector.connect(host='localhost',
-                                                        database='ota',
+                                                        database='o.t.a.',
                                                         user='root',
                                                         password='rootroot')
                     time.sleep(3)
@@ -160,7 +161,59 @@ def data(inpu):
             passo3.click()
 
 
-
+def funData(a):
+    b = a.split()
+    mese = b[2]
+    nume=''
+    if(mese =='gennaio'):
+        nume = '01'
+    elif(mese == 'febbraio'):
+        nume = '02'
+    elif(mese == 'marzo'):
+        nume = '03'
+    elif(mese == 'aprile'):
+        nume = '04'
+    elif(mese == 'maggio'):
+        nume = '05'
+    elif(mese == 'giugno'):
+        nume = '06'
+    elif(mese == 'luglio'):
+        nume = '07'
+    elif(mese == 'agosto'):
+        nume = '08'
+    elif(mese == 'settembre'):
+        nume = '09'
+    elif(mese == 'ottobre'):
+        nume = '10'
+    elif(mese == 'novembre'):
+        nume = '11'
+    elif(mese == 'dicembre'):
+        nume = '12'
+    giorno = b[1]
+    if(giorno=='1'):
+        giorno = '01'
+    elif(giorno=='2'):
+        giorno ='02'
+    elif(giorno=='3'):
+        giorno ='03'
+    elif(giorno=='4'):
+        giorno ='04'
+    elif(giorno=='5'):
+        giorno ='05'
+    elif(giorno=='6'):
+        giorno ='06'
+    elif(giorno=='7'):
+        giorno ='07'
+    elif(giorno=='8'):
+        giorno ='08'
+    elif(giorno=='9'):
+        giorno ='09'
+    c = ['','','']
+    c[0] = b[3]
+    c[1]= nume
+    c[2]= giorno
+    d = '-'.join(c)
+    return (d)
 
 for i in range(0,11):
     data(sys.argv[1])

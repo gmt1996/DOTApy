@@ -14,7 +14,7 @@ a
 NomeHote = 'a'
 main_page = driver.current_window_handle
 connection = mysql.connector.connect(host='localhost',
-                                    database='ota',
+                                    database='o.t.a.',
                                     user='root',
                                     password='rootroot')
 time.sleep(3)
@@ -81,11 +81,52 @@ def estrazioneInfoHotel():
     except WDE:
         print("non ci sono")
 
+
+    try:
+        l=re.findall(r'(h.*)\?', driver.current_url)
+        x= l[0]
+        hturl = (x,)
+    except WDE:
+        print("err recensioni")
+    try:
+
+        mySql_insert_query = """INSERT INTO accomodation (NomeHotel, indirizzo, url)
+               VALUES
+               (%s, %s, %s) """
+
+        cursor = connection.cursor()
+        global NomeHote
+        result = cursor.execute(mySql_insert_query, (NomeHote[0], indiri[0], hturl[0]))
+        connection.commit()
+        print("Record inserted successfully into accomodation table")
+        cursor.close()
+
+    except mysql.connector.Error as error:
+        print("Failed to insert record into accomodation table {}".format(error))
+
     #reperisce tutte le cose che piacciono di più ai vistatori
     try:
         pazziper = driver.find_elements_by_class_name('important_facility')
         pazzi = ' '
         for i in range(0,len(pazziper)//2):
+            gsd = pazziper[i].text
+            try:
+                cursor = connection.cursor()
+                cursor.execute("SELECT max(IDHotel) from accomodation")
+                risultato = cursor.fetchone()
+                cursor.close()
+
+                mySql_insert_query = """INSERT INTO accomodationpazziper (idhotel, pazziper)
+                       VALUES
+                       (%s, %s) """
+                cursor = connection.cursor()
+                result = cursor.execute(mySql_insert_query, (risultato[0],gsd))
+                connection.commit()
+                print("Record inserted successfully into accomodationpazziper table")
+                cursor.close()
+
+            except mysql.connector.Error as error:
+                print("Failed to insert record into accomodationpazziper table {}".format(error))
             pazzi = pazzi + pazziper[i].text + ', '
             #print(pazziper[i].text)
     except WDE:
@@ -96,6 +137,25 @@ def estrazioneInfoHotel():
         recensioni = driver.find_elements_by_class_name('c-review__body')
         recen = ''
         for i in range(0,len(recensioni)):
+            q = recensioni[i].text
+            try:
+                cursor = connection.cursor()
+                cursor.execute("SELECT max(IDHotel) from accomodation")
+                risultato = cursor.fetchone()
+                cursor.close()
+
+                mySql_insert_query = """INSERT INTO accomodationrecensioni (idhotel, recensione)
+                       VALUES
+                       (%s, %s) """
+                cursor = connection.cursor()
+                result = cursor.execute(mySql_insert_query, (risultato[0],q))
+                connection.commit()
+                print("Record inserted successfully into accomodationrecensioni table")
+                cursor.close()
+
+
+            except mysql.connector.Error as error:
+                print("Failed to insert record into accomodationrecensioni table {}".format(error))
             recen = recen + recensioni[i].text + '; '
             #print(recensioni[i].text)
     except WDE:
@@ -106,30 +166,29 @@ def estrazioneInfoHotel():
         motivi3 = driver.find_elements_by_class_name('oneusp')
         mot = ''
         for i in range(0,len(motivi3)):
+            fd = motivi3[i].text
+            try:
+                cursor = connection.cursor()
+                cursor.execute("SELECT max(IDHotel) from accomodation")
+                risultato = cursor.fetchone()
+                cursor.close()
+
+                mySql_insert_query = """INSERT INTO accomodationmotivi (idhotel, motivo)
+                       VALUES
+                       (%s, %s) """
+                cursor = connection.cursor()
+                result = cursor.execute(mySql_insert_query, (risultato[0],fd))
+                connection.commit()
+                print("Record inserted successfully into accomodationrecensioni table")
+                cursor.close()
+
+
+            except mysql.connector.Error as error:
+                print("Failed to insert record into accomodationmotivi table {}".format(error))
             mot = mot + motivi3[i].text + '; '
     except WDE:
         print("err recensioni")
-    try:
-        l=re.findall(r'(h.*)\?', driver.current_url)
-        x= l[0]
-        hturl = (x,)
-    except WDE:
-        print("err recensioni")
-    try:
 
-        mySql_insert_query = """INSERT INTO accomodation (NomeHotel, indirizzo, pazziPer, recensioni, motivi, url)
-               VALUES
-               (%s, %s, %s, %s, %s, %s) """
-
-        cursor = connection.cursor()
-        global NomeHote
-        result = cursor.execute(mySql_insert_query, (NomeHote[0], indiri[0], pazzi, recen, mot, hturl[0]))
-        connection.commit()
-        print("Record inserted successfully into accomodation table")
-        cursor.close()
-
-    except mysql.connector.Error as error:
-        print("Failed to insert record into accomodation table {}".format(error))
     #estrae tutte le categorie e per ognuna le sue info
     try:
         checklistSection = driver.find_elements_by_class_name('facilitiesChecklistSection')
@@ -144,7 +203,7 @@ def estrazioneInfoHotel():
                 elementi = checklistSection[i].find_elements_by_tag_name('li')[j].text
                 e = (elementi, )
                 try:
-                    mySql_insert_query = """INSERT INTO servizi (value)
+                    mySql_insert_query = """INSERT INTO servizi (servizio)
                            VALUES
                            (%s) """
 
@@ -161,7 +220,7 @@ def estrazioneInfoHotel():
                     risultato = cursor.fetchone()
                     cursor.close()
                     cursor = connection.cursor()
-                    cursor.execute("SELECT idservizi from servizi WHERE value = %s" , e)
+                    cursor.execute("SELECT id from servizi WHERE servizio = %s" , e)
                     risultato1 = cursor.fetchone()
                     cursor.close()
                     mySql_insert_query = """INSERT INTO accomodationservice (IDHotel, IDServizi)
