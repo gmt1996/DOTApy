@@ -17,9 +17,9 @@ driver = webdriver.Chrome('/Users/matteogiannettoni/Desktop/scraper/chromedriver
 
 driver.get('https://www.booking.com/index.it.html?aid=376372;label=it-5Srxg0e1twJI_ryrey2UnQS267778030990%3Apl%3Ata%3Ap1%3Ap22.537.000%3Aac%3Aap1t1%3Aneg%3Afi%3Atikwd-65526620%3Alp1008645%3Ali%3Adec%3Adm;sid=d609fa4cf73aa79faad84de2c1edf6e7;keep_landing=1;redirected=1;source=country&gclid=Cj0KCQjwrrXtBRCKARIsAMbU6bGPNWfeLivjgzvrBEe5kwcWMZSwg2cl7-5iz3j_1hebY6CifnAXBQkaAnecEALw_wcB&')
 
-z = 1
+z = 35
 mesi = ["dicembre 2019", "gennaio 2020", "febbraio 2020", "marzo 2020", "aprile 2020", "maggio 2020", "giugno 2020", "luglio 2020", "agosto 2020", "settembre 2020", "ottobre 2020", "novembre 2020"]
-cont = 0
+cont = 11
 def data(inpu):
     #driver.refresh()
     #leva i coockie
@@ -39,7 +39,7 @@ def data(inpu):
     mese = driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[3]/div[1]/div')
 
 
-    for i in range(0,38):
+    for i in range(33,38):
             passo3 = driver.find_element_by_class_name('xp__dates-inner')
             driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[2]')
             passo3.click()
@@ -57,11 +57,6 @@ def data(inpu):
             #passo3 = driver.find_element_by_class_name('xp__dates-inner')
             #passo3.click()
             global z
-            if(z==38):
-                cont = cont + 1
-                z = 0
-                passo3.click()
-                return
             if(cont == 5 and z == 35):
                 cont = cont + 1
                 z = 0
@@ -72,6 +67,13 @@ def data(inpu):
                 z = 0
                 passo3.click()
                 return
+            if(z==38):
+                cont = cont + 1
+                z = 0
+                passo3.click()
+                return
+
+
 
 
 
