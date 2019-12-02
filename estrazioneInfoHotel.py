@@ -34,12 +34,6 @@ def entraHotel():
         estrazioneInfoHotel()
         time.sleep(1)
     time.sleep(3)
-    #non funziona
-    #indirizzo = driver.find_element_by_xpath('//*[@id="showMap2"]/span')
-    #print(indirizzo)
-
-
-
 def seleziona5km():
     try:
         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
@@ -66,9 +60,6 @@ def estrazioneInfoHotel():
         #prende nome hotel
     try:
         nomeHt = driver.find_element_by_class_name('hp__hotel-name')
-        #nomeHt = driver.find_element_by_xpath('//*[@id="hp_hotel_name"]')
-        #nomeHt = driver.find_element_by_class_name('fn')
-        #print(nomeHt.text)
     except WDE:
         print("no nome")
 
