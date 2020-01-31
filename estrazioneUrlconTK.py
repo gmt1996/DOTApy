@@ -14,7 +14,10 @@ import sys
 import tkinter as tk
 from googletrans import Translator
 
-driver = webdriver.Chrome(executable_path = 'G:\chromedriver_win32\chromedriver.exe')
+options = webdriver.ChromeOptions()
+options.add_argument('headless')
+driver = webdriver.Chrome(options = options)
+
 
 driver.get('https://www.booking.com/index.it.html?aid=376372;label=it-5Srxg0e1twJI_ryrey2UnQS267778030990%3Apl%3Ata%3Ap1%3Ap22.537.000%3Aac%3Aap1t1%3Aneg%3Afi%3Atikwd-65526620%3Alp1008645%3Ali%3Adec%3Adm;sid=d609fa4cf73aa79faad84de2c1edf6e7;keep_landing=1;redirected=1;source=country&gclid=Cj0KCQjwrrXtBRCKARIsAMbU6bGPNWfeLivjgzvrBEe5kwcWMZSwg2cl7-5iz3j_1hebY6CifnAXBQkaAnecEALw_wcB&')
 
@@ -119,7 +122,7 @@ def data(inpu):
                 try:
                     print('ciao')
                     connection = mysql.connector.connect(host='localhost',
-                                                        database='otatest',
+                                                        database='o.t.a.',
                                                         user='root',
                                                         password='rootroot')
                     time.sleep(3)

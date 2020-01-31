@@ -18,10 +18,12 @@ prox.http_proxy = "ip_addr:port"
 prox.socks_proxy = "ip_addr:port"
 prox.ssl_proxy = "ip_addr:port"
 
-
-options = Options()
-options.headless = True
-driver = webdriver.Firefox(executable_path = '/Users/matteogiannettoni/Desktop/scraper/geckodriver', options=options, )
+options = webdriver.ChromeOptions()
+options.add_argument('headless')
+driver = webdriver.Chrome(options = options)
+# options = Options()
+# options.headless = True
+# driver = webdriver.Firefox(executable_path = '/Users/matteogiannettoni/Desktop/scraper/geckodriver', options=options, )
 
 giorno = (datetime.date.today(), )
 

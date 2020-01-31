@@ -12,13 +12,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import sys
 
+options = webdriver.ChromeOptions()
+options.add_argument('headless')
+driver = webdriver.Chrome(options = options)
 
-driver = webdriver.Chrome('/Users/matteogiannettoni/Desktop/scraper/chromedriver')
 
 driver.get('https://www.booking.com/index.it.html?aid=376372;label=it-5Srxg0e1twJI_ryrey2UnQS267778030990%3Apl%3Ata%3Ap1%3Ap22.537.000%3Aac%3Aap1t1%3Aneg%3Afi%3Atikwd-65526620%3Alp1008645%3Ali%3Adec%3Adm;sid=d609fa4cf73aa79faad84de2c1edf6e7;keep_landing=1;redirected=1;source=country&gclid=Cj0KCQjwrrXtBRCKARIsAMbU6bGPNWfeLivjgzvrBEe5kwcWMZSwg2cl7-5iz3j_1hebY6CifnAXBQkaAnecEALw_wcB&')
 
 z = 1
-mesi = ["dicembre 2019", "gennaio 2020", "febbraio 2020", "marzo 2020", "aprile 2020", "maggio 2020", "giugno 2020", "luglio 2020", "agosto 2020", "settembre 2020", "ottobre 2020", "novembre 2020"]
+mesi = [ "febbraio 2020", "marzo 2020", "aprile 2020", "maggio 2020", "giugno 2020", "luglio 2020", "agosto 2020", "settembre 2020", "ottobre 2020", "novembre 2020", "dicembre 2020", "gennaio 2021"]
 cont = 0
 def data(inpu):
     #driver.refresh()
@@ -57,12 +59,12 @@ def data(inpu):
             #passo3 = driver.find_element_by_class_name('xp__dates-inner')
             #passo3.click()
             global z
-            if(cont == 5 and z == 35):
+            if(cont == 3 and z == 35):
                 cont = cont + 1
                 z = 0
                 passo3.click()
                 return
-            if(cont == 6 and z == 30):
+            if(cont == 4 and z == 30):
                 cont = cont + 1
                 z = 0
                 passo3.click()
@@ -116,6 +118,7 @@ def data(inpu):
                 b = (format,)
                 c = inpu
                 try:
+                    print('ciao')
                     connection = mysql.connector.connect(host='localhost',
                                                         database='o.t.a.',
                                                         user='root',
