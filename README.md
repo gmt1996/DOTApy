@@ -10,7 +10,7 @@ Installare le librerie
 - re
 - tkinter
 
-Scaricare il driver per la vostra versione di Google Chrome
+Scaricare il driver per la vostra versione di Google Chrome da questo link https://chromedriver.chromium.org/downloads
 
 ## Strumento per database
 MYSQLWorkbench
