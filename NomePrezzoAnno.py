@@ -1,5 +1,6 @@
 #estrae nome hotel e prezzo di tutte le pagine per un anno
-##funziona in modalita headless con firefox eventualmente per server
+
+import configparser
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -11,6 +12,9 @@ from mysql.connector import Error
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 import datetime
 import re
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 prox = Proxy()
 prox.proxy_type = ProxyType.MANUAL
@@ -31,10 +35,10 @@ giorno = (datetime.date.today(), )
 
 
 mydb = mysql.connector.connect(
-    host = "localhost",
-    user = "root",
-    passwd = "rootroot",
-    database = "o.t.a."
+    host = config['mysqlDB']['host'],
+           user = config['mysqlDB']['user'],
+           passwd = config['mysqlDB']['pass'],
+           db = config['mysqlDB']['db']
    )
 mycursor = mydb.cursor()
 mycursor.execute("SELECT url, data, citta FROM urlhotel")
