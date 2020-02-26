@@ -10,7 +10,10 @@ from mysql.connector import Error
 import re
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
-driver = webdriver.Chrome(options = options)
+#windows
+driver = webdriver.Chrome( options = options)
+#linux inserire path chromedriver
+#driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 
 config = configparser.ConfigParser()
 config.read('config.ini')
