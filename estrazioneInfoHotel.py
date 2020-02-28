@@ -8,6 +8,7 @@ from selenium.common.exceptions import WebDriverException as WDE
 import mysql.connector
 from mysql.connector import Error
 import re
+import sys
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
 #windows
@@ -18,7 +19,7 @@ driver = webdriver.Chrome( options = options)
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-a = driver.get('https://www.booking.com/searchresults.it.html?aid=376372&label=it-3aOU9G8CnPp3k4iv4SLQrwS267778030993%3Apl%3Ata%3Ap1%3Ap22.538.000%3Aac%3Aap1t1%3Aneg%3Afi%3Atikwd-298012084940%3Alp1008645%3Ali%3Adec%3Adm&sid=d609fa4cf73aa79faad84de2c1edf6e7&sb=1&src=index&src_elem=sb&error_url=https%3A%2F%2Fwww.booking.com%2Findex.it.html%3Faid%3D376372%3Blabel%3Dit-3aOU9G8CnPp3k4iv4SLQrwS267778030993%253Apl%253Ata%253Ap1%253Ap22.538.000%253Aac%253Aap1t1%253Aneg%253Afi%253Atikwd-298012084940%253Alp1008645%253Ali%253Adec%253Adm%3Bsid%3Dd609fa4cf73aa79faad84de2c1edf6e7%3Bsb_price_type%3Dtotal%26%3B&ss=Pisa&is_ski_area=0&ssne=Pisa&ssne_untouched=Pisa&dest_id=-124918&dest_type=city&checkin_year=&checkin_month=&checkout_year=&checkout_month=&group_adults=2&group_children=0&no_rooms=1&b_h4u_keep_filters=&from_sf=1')
+a = driver.get('https://www.booking.com/')
 a
 NomeHote = 'a'
 main_page = driver.current_window_handle
@@ -263,7 +264,11 @@ def pagSuccessiva(a):
     time.sleep(3)
     pag.click()
     main_page = driver.current_window_handle
-
+passo0 = driver.find_element_by_class_name('c-autocomplete__input')
+passo0.send_keys(sys.argv[1])
+cerca = driver.find_element_by_class_name('xp__button')
+cerca.click()
+time.sleep(3)
 seleziona5km()
 try:
     while(driver.find_element_by_xpath('//*[@id="search_results_table"]/div[4]/nav/ul/li[3]/a')):
