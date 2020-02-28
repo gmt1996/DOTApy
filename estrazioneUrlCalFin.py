@@ -14,9 +14,9 @@ import sys
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("city", type=str, help="seleziona la città per la quale estrarre i dati")
-parser.add_argument("data inizio", type=str, help="seleziona il mese di inizio")
-parser.add_argument("numero di mesi", type=int, help="seleziona per quanti mesi effettuare l'estrazione")
+parser.add_argument("city", type=str, help="seleziona la città per la quale estrarre i dati es: pisa")
+parser.add_argument("data inizio", type=str, help="seleziona il mese di inizio con il formato mese anno, es: maggio 2020")
+parser.add_argument("numero di mesi", type=int, help="seleziona per quanti mesi effettuare l'estrazione es: 6")
 
 args = parser.parse_args()
 config = configparser.ConfigParser()

@@ -9,13 +9,17 @@ import mysql.connector
 from mysql.connector import Error
 import re
 import sys
+import argparse
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
 #windows
 driver = webdriver.Chrome( options = options)
 #linux inserire path chromedriver
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
+parser = argparse.ArgumentParser()
+parser.add_argument("city", type=str, help="seleziona la città per la quale estrarre i dati es: pisa")
 
+args = parser.parse_args()
 config = configparser.ConfigParser()
 config.read('config.ini')
 
@@ -39,8 +43,6 @@ def entraHotel():
         global NomeHote
         NomeHote = (pi,)
         s.click()
-
-        #print(numHt[i].find_element_by_class_name('sr-hotel__name').text)
         estrazioneInfoHotel()
         time.sleep(1)
     time.sleep(3)
@@ -63,7 +65,6 @@ def seleziona5km():
     time.sleep(2)
 
 def estrazioneInfoHotel():
-    #main_page = driver.current_window_handle
     for i in driver.window_handles:
         driver.switch_to.window(i)
         time.sleep(2)
@@ -129,7 +130,6 @@ def estrazioneInfoHotel():
             except mysql.connector.Error as error:
                 print("Failed to insert record into accomodationpazziper table {}".format(error))
             pazzi = pazzi + pazziper[i].text + ', '
-            #print(pazziper[i].text)
     except WDE:
         print("err pazzi per")
 
@@ -158,7 +158,6 @@ def estrazioneInfoHotel():
             except mysql.connector.Error as error:
                 print("Failed to insert record into accomodationrecensioni table {}".format(error))
             recen = recen + recensioni[i].text + '; '
-            #print(recensioni[i].text)
     except WDE:
         print("err recensioni")
 
