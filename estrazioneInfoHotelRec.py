@@ -33,16 +33,6 @@ connection = mysql.connector.connect(host = config['mysqlDB']['host'],
        db = config['mysqlDB']['db'])
 time.sleep(3)
 def recen():
-    try:
-        coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
-        coo.click()
-    except WDE:
-        print("Not able to find element")
-    try:
-        coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
-        coo1.click()
-    except WDE:
-        print("Not able to find element")
     time.sleep(2)
     allRec = driver.find_element_by_xpath('//*[@id="left"]/div[10]/div[14]/button')
     allRec.click()
