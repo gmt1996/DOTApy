@@ -8,7 +8,8 @@ Installare le librerie
 - selenium
 - mysql connector
 - re
-- tkinter
+- configparser
+- argparse
 
 Scaricare il driver per la vostra versione di Google Chrome da questo link https://chromedriver.chromium.org/downloads
 
