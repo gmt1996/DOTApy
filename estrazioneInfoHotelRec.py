@@ -34,7 +34,7 @@ connection = mysql.connector.connect(host = config['mysqlDB']['host'],
 time.sleep(3)
 def recen():
     time.sleep(2)
-    allRec = driver.find_element_by_xpath('//*[@id="left"]/div[10]/div[14]/button')
+    allRec = driver.find_element_by_xpath('//*[@id="show_reviews_tab"]')
     allRec.click()
     cust = driver.find_element_by_xpath('//*[@id="review_sort"]')
     cust.click()
