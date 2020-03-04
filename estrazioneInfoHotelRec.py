@@ -33,7 +33,7 @@ connection = mysql.connector.connect(host = config['mysqlDB']['host'],
        db = config['mysqlDB']['db'])
 time.sleep(3)
 def recen():
-    time.sleep(2)
+    time.sleep(3)
     allRec = driver.find_element_by_xpath('//*[@id="show_reviews_tab"]')
     allRec.click()
     cust = driver.find_element_by_xpath('//*[@id="review_sort"]')
@@ -52,7 +52,11 @@ def recen():
         for i in range(0,len(numRec)):
             name = numRec[i].find_element_by_class_name('bui-avatar-block__title').text
             title = numRec[i].find_element_by_class_name('c-review-block__title').text
-            nation = numRec[i].find_element_by_class_name('bui-avatar-block__subtitle').text
+            nation = ''
+            try:
+                nation = numRec[i].find_element_by_class_name('bui-avatar-block__subtitle').text
+            except WDE:
+                print('no nation')
             recens = numRec[i].find_element_by_class_name('c-review')
             pos = recens.find_elements_by_class_name('c-review__row')
             score = numRec[i].find_element_by_class_name('bui-review-score__badge').text
