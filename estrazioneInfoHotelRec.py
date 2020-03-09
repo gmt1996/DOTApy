@@ -11,7 +11,7 @@ import re
 import sys
 import argparse
 options = webdriver.ChromeOptions()
-#options.add_argument('headless')
+options.add_argument('headless')
 #windows
 driver = webdriver.Chrome( options = options)
 #linux inserire path chromedriver
@@ -335,10 +335,21 @@ def pagSuccessiva(a):
     time.sleep(3)
     pag.click()
     main_page = driver.current_window_handle
+try:
+    coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
+    coo.click()
+except WDE:
+    print("Not able to find element")
+try:
+    coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
+    coo1.click()
+except WDE:
+    print("Not able to find element")
 passo0 = driver.find_element_by_class_name('c-autocomplete__input')
 passo0.send_keys(sys.argv[1])
-cerca = driver.find_element_by_class_name('xp__button')
-cerca.click()
+passo0.send_keys(Keys.ENTER)
+#cerca = driver.find_element_by_class_name('sb-searchbox__button')
+#cerca.click()
 time.sleep(3)
 seleziona5km()
 try:
