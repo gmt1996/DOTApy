@@ -55,6 +55,16 @@ def data(inpu,inpu1):
     global annorife
     global ann
     for i in range(calendario[0],calendario[1]+calendario[0]):
+            try:
+                coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
+                coo.click()
+            except WDE:
+                print("Not able to find element")
+            try:
+                coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
+                coo1.click()
+            except WDE:
+                print("Not able to find element")
             passo3 = driver.find_element_by_class_name('xp__dates-inner')
             driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[2]')
             passo3.click()
