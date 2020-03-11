@@ -21,8 +21,9 @@ parser.add_argument("-m", type=int,required= True, help="seleziona per quanti me
 
 args = parser.parse_args()
 config = configparser.ConfigParser()
-config.read('config.ini')
-
+configurazione = config.read('config.ini')
+if not configurazione:
+    exit('file config.ini non trovato')
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
 #windows

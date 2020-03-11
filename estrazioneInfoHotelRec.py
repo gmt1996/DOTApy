@@ -21,10 +21,11 @@ parser.add_argument("-c", type=str,required= True, help="seleziona la città per
 
 args = parser.parse_args()
 config = configparser.ConfigParser()
-config.read('config.ini')
+configurazione = config.read('config.ini')
+if not configurazione:
+    exit('file config.ini non trovato')
 
-a = driver.get('https://www.booking.com/')
-a
+driver.get('https://www.booking.com/')
 NomeHote = 'a'
 main_page = driver.current_window_handle
 connection = mysql.connector.connect(host = config['mysqlDB']['host'],

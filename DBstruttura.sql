@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `o.t.a.2` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `o.t.a.2`;
+CREATE DATABASE  IF NOT EXISTS `o.t.a.` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `o.t.a.`;
 -- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: o.t.a.2
+-- Host: 127.0.0.1    Database: o.t.a.
 -- ------------------------------------------------------
 -- Server version	8.0.18
 
@@ -141,11 +141,11 @@ CREATE TABLE `urlhotel` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping events for database 'o.t.a.2'
+-- Dumping events for database 'o.t.a.'
 --
 
 --
--- Dumping routines for database 'o.t.a.2'
+-- Dumping routines for database 'o.t.a.'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

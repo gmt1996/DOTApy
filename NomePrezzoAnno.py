@@ -14,7 +14,9 @@ import datetime
 import re
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+configurazione = config.read('config.ini')
+if not configurazione:
+    exit('file config.ini non trovato')
 
 prox = Proxy()
 prox.proxy_type = ProxyType.MANUAL
@@ -25,14 +27,8 @@ prox.ssl_proxy = "ip_addr:port"
 options = webdriver.ChromeOptions()
 options.add_argument('headless')
 driver = webdriver.Chrome(options = options)
-# options = Options()
-# options.headless = True
-# driver = webdriver.Firefox(executable_path = '/Users/matteogiannettoni/Desktop/scraper/geckodriver', options=options, )
 
 giorno = (datetime.date.today(), )
-
-
-
 
 mydb = mysql.connector.connect(
     host = config['mysqlDB']['host'],
@@ -44,7 +40,6 @@ mycursor = mydb.cursor()
 mycursor.execute("SELECT url, data, citta FROM urlhotel")
 myresult = mycursor.fetchall()
 mycursor.close()
-#mydb.close()
 beta = 1
 try:
  for i in myresult:
@@ -66,7 +61,6 @@ try:
                 if(numHt[i].find_elements_by_class_name("fe_banner__title")):
                     t =0
                     p = (t,)
-
                 else:
                     try:
                         if(numHt[i].find_element_by_class_name('tpi_price_label.tpi_price_label__orange')):
@@ -82,7 +76,6 @@ try:
                         mySql_insert_query = """INSERT INTO accomodationprice (NomeHotel,PrezzoHotel, dataSoggiorno, dataRicerca, CittaHotel)
                                VALUES
                                (%s,%s,%s,%s,%s) """
-
                         cursor = mydb.cursor()
                         result = cursor.execute(mySql_insert_query, (s[0],p[0],d[0],giorno[0],kk[0]))
                         mydb.commit()
@@ -90,7 +83,6 @@ try:
 
                     except mysql.connector.Error as error:
                         print("Failed to insert record into urlht table {}".format(error))
-
                     finally:
                         if (mydb.is_connected()):
                             cursor.close()
@@ -133,8 +125,7 @@ try:
                     driver.find_element_by_xpath('//*[@id="search_results_table"]/div[4]/nav/ul/li[3]/a').click()
                     time.sleep(4)
                 except WDE:
-                    print("stop")
-
+                    print("probabile errore di rete, riprovare")
         except WDE:
            trovaHtPr()
         beta = beta + 1
