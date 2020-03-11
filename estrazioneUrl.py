@@ -1,4 +1,4 @@
-#estrae tutti gli url per tutte le date dell'anno da dicembre 2019 a novembre 2020 compresi
+#estrae tutti gli url
 import configparser
 import mysql.connector
 from mysql.connector import Error
