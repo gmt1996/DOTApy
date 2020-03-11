@@ -17,7 +17,7 @@ driver = webdriver.Chrome( options = options)
 #linux inserire path chromedriver
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 parser = argparse.ArgumentParser()
-parser.add_argument("city", type=str, help="seleziona la città per la quale estrarre i dati es: pisa")
+parser.add_argument("-c", type=str,required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
 
 args = parser.parse_args()
 config = configparser.ConfigParser()
@@ -134,60 +134,60 @@ def estrazioneInfoHotel():
         print("err pazzi per")
 
     #estrae tutte le recensioni caricate sulla pagina
-    try:
-        recensioni = driver.find_elements_by_class_name('c-review__body')
-        recen = ''
-        for i in range(0,len(recensioni)):
-            q = recensioni[i].text
-            try:
-                cursor = connection.cursor()
-                cursor.execute("SELECT max(IDHotel) from accomodation")
-                risultato = cursor.fetchone()
-                cursor.close()
-
-                mySql_insert_query = """INSERT INTO accomodationrecensioni (idhotel, recensione)
-                       VALUES
-                       (%s, %s) """
-                cursor = connection.cursor()
-                result = cursor.execute(mySql_insert_query, (risultato[0],q))
-                connection.commit()
-                print("Record inserted successfully into accomodationrecensioni table")
-                cursor.close()
-
-
-            except mysql.connector.Error as error:
-                print("Failed to insert record into accomodationrecensioni table {}".format(error))
-            recen = recen + recensioni[i].text + '; '
-    except WDE:
-        print("err recensioni")
+    # try:
+    #     recensioni = driver.find_elements_by_class_name('c-review__body')
+    #     recen = ''
+    #     for i in range(0,len(recensioni)):
+    #         q = recensioni[i].text
+    #         try:
+    #             cursor = connection.cursor()
+    #             cursor.execute("SELECT max(IDHotel) from accomodation")
+    #             risultato = cursor.fetchone()
+    #             cursor.close()
+    #
+    #             mySql_insert_query = """INSERT INTO accomodationrecensioni (idhotel, recensione)
+    #                    VALUES
+    #                    (%s, %s) """
+    #             cursor = connection.cursor()
+    #             result = cursor.execute(mySql_insert_query, (risultato[0],q))
+    #             connection.commit()
+    #             print("Record inserted successfully into accomodationrecensioni table")
+    #             cursor.close()
+    #
+    #
+    #         except mysql.connector.Error as error:
+    #             print("Failed to insert record into accomodationrecensioni table {}".format(error))
+    #         recen = recen + recensioni[i].text + '; '
+    # except WDE:
+    #     print("err recensioni")
 
     #estare i buoni motivi per scegliere la struttura
-    try:
-        motivi3 = driver.find_elements_by_class_name('oneusp')
-        mot = ''
-        for i in range(0,len(motivi3)):
-            fd = motivi3[i].text
-            try:
-                cursor = connection.cursor()
-                cursor.execute("SELECT max(IDHotel) from accomodation")
-                risultato = cursor.fetchone()
-                cursor.close()
-
-                mySql_insert_query = """INSERT INTO accomodationmotivi (idhotel, motivo)
-                       VALUES
-                       (%s, %s) """
-                cursor = connection.cursor()
-                result = cursor.execute(mySql_insert_query, (risultato[0],fd))
-                connection.commit()
-                print("Record inserted successfully into accomodationmotivi table")
-                cursor.close()
-
-
-            except mysql.connector.Error as error:
-                print("Failed to insert record into accomodationmotivi table {}".format(error))
-            mot = mot + motivi3[i].text + '; '
-    except WDE:
-        print("err recensioni")
+    # try:
+    #     motivi3 = driver.find_elements_by_class_name('oneusp')
+    #     mot = ''
+    #     for i in range(0,len(motivi3)):
+    #         fd = motivi3[i].text
+    #         try:
+    #             cursor = connection.cursor()
+    #             cursor.execute("SELECT max(IDHotel) from accomodation")
+    #             risultato = cursor.fetchone()
+    #             cursor.close()
+    #
+    #             mySql_insert_query = """INSERT INTO accomodationmotivi (idhotel, motivo)
+    #                    VALUES
+    #                    (%s, %s) """
+    #             cursor = connection.cursor()
+    #             result = cursor.execute(mySql_insert_query, (risultato[0],fd))
+    #             connection.commit()
+    #             print("Record inserted successfully into accomodationmotivi table")
+    #             cursor.close()
+    #
+    #
+    #         except mysql.connector.Error as error:
+    #             print("Failed to insert record into accomodationmotivi table {}".format(error))
+    #         mot = mot + motivi3[i].text + '; '
+    # except WDE:
+    #     print("err motivi")
 
     #estrae tutte le categorie e per ognuna le sue info
     try:
@@ -238,7 +238,7 @@ def estrazioneInfoHotel():
                 ele = ele + elementi +'; '
                 print(elementi)
 
-            print("MySQL connection is closed")
+            print("fine info hotel")
     except WDE:
         print("err recensioni")
 
@@ -264,7 +264,7 @@ def pagSuccessiva(a):
     pag.click()
     main_page = driver.current_window_handle
 passo0 = driver.find_element_by_class_name('c-autocomplete__input')
-passo0.send_keys(sys.argv[1])
+passo0.send_keys(args.c)
 cerca = driver.find_element_by_class_name('xp__button')
 cerca.click()
 time.sleep(3)

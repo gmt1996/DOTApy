@@ -14,9 +14,9 @@ import sys
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("city", type=str, help="seleziona la città per la quale estrarre i dati es: pisa")
-parser.add_argument("data inizio", type=str, help="seleziona il mese di inizio con il formato mese anno es: 'maggio 2020'")
-parser.add_argument("numero di mesi", type=int, help="seleziona per quanti mesi effettuare l'estrazione es: 6")
+parser.add_argument("-c", type=str,required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
+parser.add_argument("-d", type=str,required= True, help="seleziona il mese di inizio con il formato mese anno es: 'maggio 2020'")
+parser.add_argument("-m", type=int,required= True, help="seleziona per quanti mesi effettuare l'estrazione es: 6")
 
 args = parser.parse_args()
 config = configparser.ConfigParser()
@@ -29,7 +29,7 @@ driver = webdriver.Chrome( options = options)
 #linux inserire path chromedriver
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 
-driver.get('https://www.booking.com/index.it.html?aid=376372;label=it-5Srxg0e1twJI_ryrey2UnQS267778030990%3Apl%3Ata%3Ap1%3Ap22.537.000%3Aac%3Aap1t1%3Aneg%3Afi%3Atikwd-65526620%3Alp1008645%3Ali%3Adec%3Adm;sid=d609fa4cf73aa79faad84de2c1edf6e7;keep_landing=1;redirected=1;source=country&gclid=Cj0KCQjwrrXtBRCKARIsAMbU6bGPNWfeLivjgzvrBEe5kwcWMZSwg2cl7-5iz3j_1hebY6CifnAXBQkaAnecEALw_wcB&')
+driver.get('https://www.booking.com/')
 
 def data(inpu,inpu1):
     #driver.refresh()
@@ -52,7 +52,6 @@ def data(inpu,inpu1):
     global meseRiferimento
     global splitt
     global calendario
-    global annorife
     global ann
     for i in range(calendario[0],calendario[1]+calendario[0]):
             try:
@@ -223,10 +222,9 @@ def funMesi(month):
     elif(mese == 'dicembre'):
         nume = 12
     return (nume)
-calendario = calendar.monthrange(funAnno(sys.argv[2]),funMesi(sys.argv[2]))
+calendario = calendar.monthrange(funAnno(args.d),funMesi(args.d))
 print(calendario)
-annorife = 2020
-meseRiferimento = sys.argv[2]
+meseRiferimento = args.d
 splitt = int(funMesi(meseRiferimento))
 splittato = meseRiferimento.split()
 ann = int(splittato[1])
@@ -283,6 +281,6 @@ def funData(a):
     c[2]= giorno
     d = '-'.join(c)
     return (d)
-loop = int(sys.argv[3])
+loop = int(args.m)
 for iter in range(0,loop):
-    data(sys.argv[1],sys.argv[2])
+    data(args.c,args.d)

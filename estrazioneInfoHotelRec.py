@@ -17,7 +17,7 @@ driver = webdriver.Chrome( options = options)
 #linux inserire path chromedriver
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 parser = argparse.ArgumentParser()
-parser.add_argument("city", type=str, help="seleziona la città per la quale estrarre i dati es: pisa")
+parser.add_argument("-c", type=str,required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
 
 args = parser.parse_args()
 config = configparser.ConfigParser()
@@ -346,7 +346,7 @@ try:
 except WDE:
     print("Not able to find element")
 passo0 = driver.find_element_by_class_name('c-autocomplete__input')
-passo0.send_keys(sys.argv[1])
+passo0.send_keys(args.c)
 passo0.send_keys(Keys.ENTER)
 #cerca = driver.find_element_by_class_name('sb-searchbox__button')
 #cerca.click()
