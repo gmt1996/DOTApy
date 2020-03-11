@@ -20,9 +20,11 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 - `estrazioneInfoHotel.py`: file python che esegue l'estrazione delle informazioni principali di tutti gli hotel per una specificata città.
 - `estrazioneInfoHotelRec.py`: programma identico al precedente al quale aggiunge l'estrazione di tutte le recensioni di ogni singolo hotel, a discapito del tempo impiegato che sarà considerevolmente più lungo.
 - `NomePrezzoAnno.py`: file python che esegue l'estrazione dei prezzi di tutti gli hotel utilizzando le url estratte dal file *estrazioneUrl.py*
+- `utility.py`: file python contenente alcuni funzioni utilizzate nel file *estrazioneUrl.py*.
+- `run.sh`: file esegubile che se lanciato esegue in ordine i file: `estrazioneUrl.py`,`estrazioneInfoHotel.py`, `NomePrezzoAnno.py`.
 ## Procedimento
 - Importare la struttura del database utilizzando il file `DBstruttura.sql`, creando così il DB (verificare che non sia presente un omonimo DB).
-- Modificare il file `config.ini` secondo le proprie credenziali.
+- Modificare il file `config.ini` secondo le proprie credenziali.![config](https://user-images.githubusercontent.com/51764993/76442926-e9c41080-63c1-11ea-9bf2-47efdc581336.png)
 - Eseguire il file `estrazioneUrl.py` inserendo in input: **-c** seguito dalla città desiderata, **-d** seguito tra apici da mese e anno dai quali si desidera iniziare l'estrazione e **-m** seguito dal numero di mesi per cui effettuare l'estrazione.
 es: python estrazioneUrl.py -c pisa -d "maggio 2020" -m 6![estrazioneUrl](https://user-images.githubusercontent.com/51764993/76440538-47eef480-63be-11ea-9766-8862608a9321.png)
 - Eseguire il file `estrazioneInfoHotel.py` o `estrazioneInfoHotelRec.py`(permette l'estrazione delle recensioni) inserendo in input **-c** seguito dalla città desiderata.
