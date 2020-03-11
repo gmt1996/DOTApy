@@ -22,6 +22,11 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 - `NomePrezzoAnno.py`: file python che esegue l'estrazione dei prezzi di tutti gli hotel utilizzando le url estratte dal file *estrazioneUrl.py*
 ## Procedimento
 - Importare la struttura del database utilizzando il file `DBstruttura.sql`, creando così il DB (verificare che non sia presente un omonimo DB).
-- Eseguire il file `estrazioneUrl.py` inserendo in input: **-c** seguito dalla città desiderata, **-d** seguito tra apici da mese e anno dai quali si desidera iniziare l'estrazione e **-m** seguito dal numero di mesi per cui effettuare l'estrazione. es: python estrazioneUrl.py -c pisa -d "maggio 2020" -m 6![estrazioneUrl](https://user-images.githubusercontent.com/51764993/76440538-47eef480-63be-11ea-9766-8862608a9321.png)
-- Eseguire il file `estrazioneInfoHotel.py` che permette di reperire tutte le info necessarie sugli hotel.![estrazioneInfoHotel](https://user-images.githubusercontent.com/51764993/76440765-a4eaaa80-63be-11ea-8a33-f97a74a7fbfd.png)
-- Eseguire il programma 'NomePrezzoAnno.py' per estrarre i prezzi di tutti gli hotel di tutti i giorni per un anno.![NomePrezzoAnno](https://user-images.githubusercontent.com/51764993/76440840-bb910180-63be-11ea-9854-2e441c38939e.png)
+- Eseguire il file `estrazioneUrl.py` inserendo in input: **-c** seguito dalla città desiderata, **-d** seguito tra apici da mese e anno dai quali si desidera iniziare l'estrazione e **-m** seguito dal numero di mesi per cui effettuare l'estrazione.
+es: python estrazioneUrl.py -c pisa -d "maggio 2020" -m 6![estrazioneUrl](https://user-images.githubusercontent.com/51764993/76440538-47eef480-63be-11ea-9766-8862608a9321.png)
+- Eseguire il file `estrazioneInfoHotel.py` o `estrazioneInfoHotelRec.py`(permette l'estrazione delle recensioni) inserendo in input **-c** seguito dalla città desiderata.
+es: python estrazioneInfoHotel -c pisa
+![estrazioneInfoHotel](https://user-images.githubusercontent.com/51764993/76440765-a4eaaa80-63be-11ea-8a33-f97a74a7fbfd.png)
+- Eseguire il file `NomePrezzoAnno.py` per estrarre i prezzi di tutti gli hotel per tutto il periodo estratto con il programma `estrazioneUrl.py`.
+es: python NomePrezzoAnno.py
+![NomePrezzoAnno](https://user-images.githubusercontent.com/51764993/76440840-bb910180-63be-11ea-9854-2e441c38939e.png)
