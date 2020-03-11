@@ -3,13 +3,13 @@ Applicazione estrazione automatica dei dati
 ## Requisiti
 Usare python3
 
-Installare le librerie
+Installare le librerie con pip https://pip.pypa.io/en/stable/quickstart/
 
-- selenium
-- mysql connector
-- re
-- configparser
-- argparse
+- selenium https://selenium-python.readthedocs.io/
+- mysql connector https://dev.mysql.com/doc/connector-python/en/connector-python-installation-binary.html
+- re https://docs.python.org/3/library/re.html
+- configparser https://docs.python.org/3/library/configparser.html
+- argparse https://docs.python.org/3/library/argparse.html
 
 Scaricare il driver per la vostra versione di Google Chrome da questo link https://chromedriver.chromium.org/downloads
 
