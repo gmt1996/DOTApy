@@ -1,9 +1,9 @@
 # Scraper ota
 Applicazione per l'estrazione automatica dei dati
 ## Requisiti
-Usare python3
+Usare **python3**
 
-Installare le librerie con pip https://pip.pypa.io/en/stable/quickstart/
+Installare le librerie con **pip** https://pip.pypa.io/en/stable/quickstart/
 
 - `selenium` https://selenium-python.readthedocs.io/
 - `mysql connector` https://dev.mysql.com/doc/connector-python/en/connector-python-installation-binary.html
