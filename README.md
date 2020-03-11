@@ -21,7 +21,7 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 - `estrazioneInfoHotelRec.py`: programma identico al precedente al quale aggiunge l'estrazione di tutte le recensioni di ogni singolo hotel, a discapito del tempo impiegato che sarà considerevolmente più lungo.
 - `NomePrezzoAnno.py`: file python che esegue l'estrazione dei prezzi di tutti gli hotel utilizzando le url estratte dal file *estrazioneUrl.py*
 - `utility.py`: file python contenente alcuni funzioni utilizzate nel file *estrazioneUrl.py*.
-- `run.sh`: file esegubile che se lanciato esegue in ordine i file: `estrazioneUrl.py`,`estrazioneInfoHotel.py`, `NomePrezzoAnno.py`.
+- `run.sh`: file esegubile che se lanciato esegue in ordine i file: *estrazioneUrl.py*,*estrazioneInfoHotel.py*, *NomePrezzoAnno.py*.
 ## Procedimento
 - Importare la struttura del database utilizzando il file `DBstruttura.sql`, creando così il DB (verificare che non sia presente un omonimo DB).
 - Modificare il file `config.ini` secondo le proprie credenziali.![config](https://user-images.githubusercontent.com/51764993/76442926-e9c41080-63c1-11ea-9bf2-47efdc581336.png)
