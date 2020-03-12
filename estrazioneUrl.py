@@ -22,8 +22,14 @@ parser.add_argument("-m", type=int, required= True, help="seleziona per quanti m
 args = parser.parse_args()
 config = configparser.ConfigParser()
 configurazione = config.read('config.ini')
+hostDB = config['mysqlDB']['host']
+userDB = config['mysqlDB']['user']
+passwdDB = config['mysqlDB']['pass']
+dbDB = config['mysqlDB']['db']
 if not configurazione:
     exit('file config.ini non trovato')
+if not hostDB or not userDB or not passwdDB or not dbDB:
+    exit('parametri file config.ini non definiti')
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
 #windows

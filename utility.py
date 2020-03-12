@@ -14,10 +14,11 @@ def normalizzaData(a):
     mese = b[2]
     giorno = b[1]
     numeroMese =  {'gennaio':'01','febbraio':'02','marzo':'03','aprile':'04','maggio':'05','giugno':'06','luglio':'07','agosto':'08','settembre':'09','ottobre':'10','novembre':'11','dicembre':'12'}
-    numeroGiorno =  {'1':'01','2':'02','3':'03','4':'04','5':'05','6':'06','7':'07','8':'08','9':'09'}
+    if len(giorno)==1:
+        giorno = '0'+giorno
     c = ['','','']
     c[0] = b[3]
     c[1]= numeroMese[mese]
-    c[2]= numeroGiorno[giorno]
+    c[2]= giorno
     d = '-'.join(c)
     return (d)

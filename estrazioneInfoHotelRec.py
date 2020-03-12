@@ -22,13 +22,14 @@ parser.add_argument("-c", type=str,required= True, help="seleziona la città per
 args = parser.parse_args()
 config = configparser.ConfigParser()
 configurazione = config.read('config.ini')
+hostDB = config['mysqlDB']['host']
+userDB = config['mysqlDB']['user']
+passwdDB = config['mysqlDB']['pass']
+dbDB = config['mysqlDB']['db']
 if not configurazione:
     exit('file config.ini non trovato')
-else:
-    hostDB = config['mysqlDB']['host']
-    userDB = config['mysqlDB']['user']
-    passwdDB = config['mysqlDB']['pass']
-    dbDB = config['mysqlDB']['db']
+if not hostDB or not userDB or not passwdDB or not dbDB:
+    exit('parametri file config.ini non definiti')
 
 driver.get('https://www.booking.com/')
 NomeHote = 'a'
