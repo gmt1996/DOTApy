@@ -92,12 +92,12 @@ try:
                 coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
                 coo.click()
             except WDE:
-                print("Not able to find element")
+                print("No coockie")
             try:
                 coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
                 coo1.click()
             except WDE:
-                print("Not able to find element")
+                print("No coockie")
             try:
                 km = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[3]/label/div')
                 time.sleep(2)
@@ -121,7 +121,7 @@ try:
                         coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
                         coo1.click()
                     except WDE:
-                        print("Not coockie")
+                        print("No coockie")
                     driver.find_element_by_xpath('//*[@id="search_results_table"]/div[4]/nav/ul/li[3]/a').click()
                     time.sleep(4)
                 except WDE:
