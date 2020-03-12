@@ -66,7 +66,13 @@ def recen():
             recens = numRec[i].find_element_by_class_name('c-review')
             pos = recens.find_elements_by_class_name('c-review__row')
             score = numRec[i].find_element_by_class_name('bui-review-score__badge').text
-
+            dataRec = numRec[i].find_element_by_class_name('c-review-block__date').text
+            normalizzatore = 'Recensione: '
+            if normalizzatore in dataRec:
+                temp = dataRec.split(normalizzatore)
+                dataRec = ''.join(temp)
+                dataRecensioneNormalizzata = normalizzaData(dataRec)
+            print(dataRecensioneNormalizzata)
             rp = ''
             rn = ''
 
@@ -105,17 +111,18 @@ def recen():
                     print(pos[0].text)
             except WDE:
                 print('no rec')
+
             time.sleep(2)
             try:
                 cursor = connection.cursor()
                 cursor.execute("SELECT max(IDHotel) from accomodation")
                 risultato = cursor.fetchone()
                 cursor.close()
-                mySql_insert_query = """INSERT INTO accomodationrecensioni (idhotel, nome, titolo, recensionePos, recensioneNeg, score, nazione)
+                mySql_insert_query = """INSERT INTO accomodationrecensioni (idhotel, nome, titolo, recensionePos, recensioneNeg, score, nazione, dataRecensione)
                                     VALUES
-                              (%s, %s, %s, %s, %s, %s, %s) """
+                              (%s, %s, %s, %s, %s, %s, %s, %s) """
                 cursor = connection.cursor()
-                result = cursor.execute(mySql_insert_query, (risultato[0],name,title,rp,rn,score,nation))
+                result = cursor.execute(mySql_insert_query, (risultato[0],name,title,rp,rn,score,nation, dataRecensioneNormalizzata))
                 connection.commit()
                 print("Record inserted successfully into accomodationrecensioni table")
                 cursor.close()
@@ -322,6 +329,20 @@ def estrazioneInfoHotel():
         print('errore recensioni')
     driver.close()
     driver.switch_to.window(main_page)
+def normalizzaData(x):
+    dataSeparata = x.split()
+    giorno = dataSeparata[0]
+    mese = dataSeparata[1]
+    anno = dataSeparata[2]
+    numeroMese =  {'gennaio':'01','febbraio':'02','marzo':'03','aprile':'04','maggio':'05','giugno':'06','luglio':'07','agosto':'08','settembre':'09','ottobre':'10','novembre':'11','dicembre':'12'}
+    if len(giorno)==1:
+        giorno = '0'+giorno
+    ArrayAppoggio = ['','','']
+    ArrayAppoggio[0] = anno
+    ArrayAppoggio[1]= numeroMese[mese]
+    ArrayAppoggio[2]= giorno
+    data = '-'.join(ArrayAppoggio)
+    return (data)
 
 def pagSuccessiva(a):
     ##accettare tasto cookie
