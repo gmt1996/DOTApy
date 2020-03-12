@@ -54,7 +54,6 @@ def recen():
         listaRec = driver.find_element_by_class_name('review_list')
         numRec = listaRec.find_elements_by_class_name('review_list_new_item_block')
         print(len(numRec))
-        #driver.find_element_by_class_name('bicon-aclose').click()
 
         for i in range(0,len(numRec)):
             name = numRec[i].find_element_by_class_name('bui-avatar-block__title').text
@@ -130,8 +129,7 @@ def recen():
 
             except mysql.connector.Error as error:
                  print("Failed to insert record into accomodationrecensioni table {}".format(error))
-        #driver.find_element_by_tag_name('body').send_keys(Keys.END)
-        #time.sleep(2)
+
         try:
             next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')
             next.click()
@@ -140,7 +138,6 @@ def recen():
             break
     print('fine recensioni')
 def entraHotel():
-    #main_page = driver.current_window_handle
     numHt = driver.find_elements_by_class_name('sr_item')
     #se indentato apre tutte le pagine degli hotel
     for i in range(0,len(numHt)):
@@ -181,12 +178,11 @@ def estrazioneInfoHotel():
     except WDE:
         print("no nome")
 
-    #prende tutti indirizzo
+    #prende indirizzo
     indirizz = driver.find_element_by_class_name('hp_address_subtitle').text
     indiri = (indirizz, )
     try:
         indirizzo = driver.find_element_by_class_name('hp_address_subtitle')
-        #print(indirizzo.text)
     except WDE:
         print("non ci sono")
 
@@ -217,7 +213,7 @@ def estrazioneInfoHotel():
     except mysql.connector.Error as error:
         print("Failed to insert record into accomodation table {}".format(error))
 
-    #reperisce tutte le cose che piacciono di più ai vistatori
+    #estrae tutte le cose che piacciono di più ai vistatori
     try:
         pazziper = driver.find_elements_by_class_name('important_facility')
         pazzi = ' '
@@ -244,7 +240,7 @@ def estrazioneInfoHotel():
     except WDE:
         print("err pazzi per")
 
-    #estare i buoni motivi per scegliere la struttura
+    #estrae i buoni motivi per scegliere la struttura
     try:
         motivi3 = driver.find_elements_by_class_name('oneusp')
         mot = ''
@@ -376,8 +372,6 @@ except WDE:
 passo0 = driver.find_element_by_class_name('c-autocomplete__input')
 passo0.send_keys(args.c)
 passo0.send_keys(Keys.ENTER)
-#cerca = driver.find_element_by_class_name('sb-searchbox__button')
-#cerca.click()
 time.sleep(3)
 seleziona5km()
 try:
