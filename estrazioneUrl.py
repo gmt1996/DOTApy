@@ -76,12 +76,10 @@ def data(inpu,inpu1):
             passo3.click()
             mon = calendar.month_name[splitt]
             month = traduciMesi(mon)
-            #print(month)
 
             while( driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[3]/div[1]/div').text != month+' '+str(ann)):
                 avanti = driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[2]')
                 avanti.click()
-            #passo3.click()
             driver.implicitly_wait(5)
             disab = driver.find_elements_by_class_name('bui-calendar__date.bui-calendar__date--disabled')
 
