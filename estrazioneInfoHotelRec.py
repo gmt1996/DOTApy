@@ -24,14 +24,19 @@ config = configparser.ConfigParser()
 configurazione = config.read('config.ini')
 if not configurazione:
     exit('file config.ini non trovato')
+else:
+    hostDB = config['mysqlDB']['host']
+    userDB = config['mysqlDB']['user']
+    passwdDB = config['mysqlDB']['pass']
+    dbDB = config['mysqlDB']['db']
 
 driver.get('https://www.booking.com/')
 NomeHote = 'a'
 main_page = driver.current_window_handle
-connection = mysql.connector.connect(host = config['mysqlDB']['host'],
-       user = config['mysqlDB']['user'],
-       passwd = config['mysqlDB']['pass'],
-       db = config['mysqlDB']['db'])
+connection = mysql.connector.connect(host = hostDB,
+       user = userDB,
+       passwd = passwdDB,
+       db = dbDB)
 time.sleep(3)
 def recen():
     time.sleep(3)
