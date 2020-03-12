@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `o.t.a.` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `o.t.a.`;
+CREATE DATABASE  IF NOT EXISTS `o.t.a.2` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `o.t.a.2`;
 -- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: o.t.a.
+-- Host: 127.0.0.1    Database: o.t.a.2
 -- ------------------------------------------------------
 -- Server version	8.0.18
 
@@ -32,7 +32,7 @@ CREATE TABLE `accomodation` (
   `latitudine` varchar(56) DEFAULT NULL,
   `longitudine` varchar(56) DEFAULT NULL,
   PRIMARY KEY (`IDhotel`)
-) ENGINE=InnoDB AUTO_INCREMENT=596 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=668 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +91,8 @@ CREATE TABLE `accomodationrecensioni` (
   `recensionePos` varchar(1024) DEFAULT NULL,
   `recensioneNeg` varchar(1024) DEFAULT NULL,
   `score` varchar(16) DEFAULT NULL,
-  `nazione` varchar(56) DEFAULT NULL
+  `nazione` varchar(56) DEFAULT NULL,
+  `dataRecensione` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -121,7 +122,7 @@ CREATE TABLE `servizi` (
   `servizio` varchar(128) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `value_UNIQUE` (`servizio`)
-) ENGINE=InnoDB AUTO_INCREMENT=24208 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27079 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,15 +138,15 @@ CREATE TABLE `urlhotel` (
   `data` date DEFAULT NULL,
   `citta` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=275 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=379 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping events for database 'o.t.a.'
+-- Dumping events for database 'o.t.a.2'
 --
 
 --
--- Dumping routines for database 'o.t.a.'
+-- Dumping routines for database 'o.t.a.2'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -157,4 +158,4 @@ CREATE TABLE `urlhotel` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-03 17:21:58
+-- Dump completed on 2020-03-12 17:55:38
