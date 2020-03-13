@@ -41,7 +41,6 @@ connection = mysql.connector.connect(host = hostDB,
        db = dbDB)
 time.sleep(3)
 def entraHotel():
-    #main_page = driver.current_window_handle
     numHt = driver.find_elements_by_class_name('sr_item')
     #se indentato apre tutte le pagine degli hotel
     for i in range(0,len(numHt)):
