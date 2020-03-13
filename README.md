@@ -33,4 +33,4 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 ![estrazioneInfoHotel](https://user-images.githubusercontent.com/51764993/76440765-a4eaaa80-63be-11ea-8a33-f97a74a7fbfd.png)
 - Eseguire il file `estrazionePrezzo.py` che permette l'estrazione dei prezzi di tutti gli hotel per il periodo selezionato con il programma `estrazioneUrl.py`.
 **esempio: python estrazionePrezzo.py**
-![estrazionePrezzo](https://user-images.githubusercontent.com/51764993/76440840-bb910180-63be-11ea-9854-2e441c38939e.png)
+![estrazionePrezzo](https://user-images.githubusercontent.com/51764993/76615809-0deb3300-6523-11ea-838d-a250a9ec145b.png)
