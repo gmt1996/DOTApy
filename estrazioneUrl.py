@@ -22,6 +22,7 @@ parser.add_argument("-m", type=int, required= True, help="seleziona per quanti m
 args = parser.parse_args()
 config = configparser.ConfigParser()
 configurazione = config.read('config.ini')
+#controllo su esistenza del file config.ini e se i suoi parametri non sono vuoti
 if not configurazione:
     exit('file config.ini non trovato')
 else:
@@ -31,6 +32,14 @@ else:
     dbDB = config['mysqlDB']['db']
 if not hostDB or not userDB or not passwdDB or not dbDB:
     exit('parametri file config.ini non definiti')
+try:
+    connection = mysql.connector.connect(host = hostDB,
+           user = userDB,
+           passwd = passwdDB,
+           db = dbDB)
+    print('stabilita connessione al DB')
+except:
+    exit('impossibile stabilire connessione al DB')
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
 #windows
@@ -38,6 +47,7 @@ driver = webdriver.Chrome( options = options)
 #linux inserire path chromedriver
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 
+#apre la pagina web all'indirizzo specificato
 driver.get('https://www.booking.com/')
 
 def data(inpu,inpu1):
@@ -61,6 +71,7 @@ def data(inpu,inpu1):
     global splitt
     global calendario
     global ann
+    #ciclo su tutti i giorni disponibili per il mese considerato
     for i in range(calendario[0],calendario[1]+calendario[0]):
             try:
                 coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
@@ -77,7 +88,7 @@ def data(inpu,inpu1):
             passo3.click()
             mon = calendar.month_name[splitt]
             month = traduciMesi(mon)
-
+            #avanza nel calendario fino ad arrivare al mese obbiettivo
             while( driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[3]/div[1]/div').text != month+' '+str(ann)):
                 avanti = driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[2]')
                 avanti.click()
@@ -119,11 +130,7 @@ def data(inpu,inpu1):
                 dataPernottamento = (format,)
                 cittaEstrazione = inpu
                 try:
-                    connection = mysql.connector.connect(host = hostDB,
-                           user = userDB,
-                           passwd = passwdDB,
-                           db = dbDB)
-                    time.sleep(3)
+                    time.sleep(1)
 
                     mySql_insert_query = """INSERT INTO urlHotel (url, data, citta)
                            VALUES
@@ -137,16 +144,15 @@ def data(inpu,inpu1):
 
                 except mysql.connector.Error as error:
                     print("Failed to insert record into urlht table {}".format(error))
-
                 time.sleep(3)
 
                 #torna alla pagina prima
                 driver.back()
                 time.sleep(1)
-                #driver.refresh()
                 driver.implicitly_wait(5)
                 passo3 = driver.find_element_by_class_name('xp__dates-inner')
                 passo3.click()
+                #avanza fino ad arrivare al mese obbiettivo
                 while( driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[3]/div[1]/div').text != month+' '+str(ann)):
                     avanti = driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[2]').click()
 
