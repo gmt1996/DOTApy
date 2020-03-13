@@ -17,7 +17,7 @@ driver = webdriver.Chrome( options = options)
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", type=str, required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
-
+parser.add_argument("--verbose", help="aumenta l'output", action="store_true")
 args = parser.parse_args()
 config = configparser.ConfigParser()
 configurazione = config.read('config.ini')
@@ -31,7 +31,7 @@ else:
 if not hostDB or not userDB or not passwdDB or not dbDB:
     exit('parametri file config.ini non definiti')
 
-
+#apre la pagina web all'indirizzo specificato
 driver.get('https://www.booking.com/')
 NomeHote = 'a'
 main_page = driver.current_window_handle
@@ -42,7 +42,6 @@ connection = mysql.connector.connect(host = hostDB,
 time.sleep(3)
 def entraHotel():
     numHt = driver.find_elements_by_class_name('sr_item')
-    #se indentato apre tutte le pagine degli hotel
     for i in range(0,len(numHt)):
         s = numHt[i].find_element_by_class_name('sr-hotel__name')
 
@@ -53,6 +52,7 @@ def entraHotel():
         estrazioneInfoHotel()
         time.sleep(1)
     time.sleep(3)
+
 def seleziona5km():
     try:
         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
@@ -81,12 +81,11 @@ def estrazioneInfoHotel():
     except WDE:
         print("no nome")
 
-    #prende tutti indirizzo
+    #estrae indirizzo
     indirizz = driver.find_element_by_class_name('hp_address_subtitle').text
     indiri = (indirizz, )
     try:
         indirizzo = driver.find_element_by_class_name('hp_address_subtitle')
-        #print(indirizzo.text)
     except WDE:
         print("non ci sono")
 
@@ -97,6 +96,7 @@ def estrazioneInfoHotel():
         hturl = (x,)
     except WDE:
         print("err recensioni")
+    #estrae latitudine e longitudine dal file javaScript
     javaScriptLat = "return(booking.env.b_map_center_latitude)"
     lat = driver.execute_script(javaScriptLat)
     javaScriptLon = "return(booking.env.b_map_center_longitude)"
@@ -117,7 +117,7 @@ def estrazioneInfoHotel():
     except mysql.connector.Error as error:
         print("Failed to insert record into accomodation table {}".format(error))
 
-    #reperisce tutte le cose che piacciono di più ai vistatori
+    #estrae tutte le cose che piacciono di più ai vistatori e le inserisce nel DB
     try:
         pazziper = driver.find_elements_by_class_name('important_facility')
         pazzi = ' '
@@ -147,12 +147,12 @@ def estrazioneInfoHotel():
     #estrae tutte le categorie e per ognuna le sue info
     try:
         checklistSection = driver.find_elements_by_class_name('facilitiesChecklistSection')
-        print(len(checklistSection))
         ele = ''
 
         for i in range(0,len(checklistSection)):
             h5 = checklistSection[i].find_element_by_tag_name('h5')
-            print(h5.text)
+            if args.verbose:
+                print(h5.text)
 
             for j in range(0,len(checklistSection[i].find_elements_by_tag_name('li'))):
                 elementi = checklistSection[i].find_elements_by_tag_name('li')[j].text
@@ -191,7 +191,8 @@ def estrazioneInfoHotel():
                 except mysql.connector.Error as error:
                     print("Failed to insert record into accomodationservice table {}".format(error))
                 ele = ele + elementi +'; '
-                print(elementi)
+                if args.verbose:
+                    print(elementi)
 
             print("fine info hotel")
     except WDE:

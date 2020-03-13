@@ -18,7 +18,7 @@ driver = webdriver.Chrome( options = options)
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", type=str,required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
-
+parser.add_argument("--verbose", help="aumenta l'output", action="store_true")
 args = parser.parse_args()
 config = configparser.ConfigParser()
 configurazione = config.read('config.ini')
@@ -32,6 +32,7 @@ else:
 if not hostDB or not userDB or not passwdDB or not dbDB:
     exit('parametri file config.ini non definiti')
 
+#apre la pagina web all'indirizzo specificato
 driver.get('https://www.booking.com/')
 NomeHote = 'a'
 main_page = driver.current_window_handle
@@ -40,6 +41,7 @@ connection = mysql.connector.connect(host = hostDB,
        passwd = passwdDB,
        db = dbDB)
 time.sleep(3)
+#funzione che estrae le tutte le recensioni presenti ordinate dalle più recenti
 def recen():
     time.sleep(3)
     allRec = driver.find_element_by_xpath('//*[@id="show_reviews_tab"]')
@@ -54,7 +56,8 @@ def recen():
         time.sleep(1)
         listaRec = driver.find_element_by_class_name('review_list')
         numRec = listaRec.find_elements_by_class_name('review_list_new_item_block')
-        print(len(numRec))
+        if args.verbose:
+            print(len(numRec))
 
         for i in range(0,len(numRec)):
             name = numRec[i].find_element_by_class_name('bui-avatar-block__title').text
@@ -73,7 +76,8 @@ def recen():
                 temp = dataRec.split(normalizzatore)
                 dataRec = ''.join(temp)
                 dataRecensioneNormalizzata = normalizzaData(dataRec)
-            print(dataRecensioneNormalizzata)
+            if args.verbose:
+                print(dataRecensioneNormalizzata)
             rp = ''
             rn = ''
 
@@ -97,8 +101,9 @@ def recen():
                     if piacn in rn:
                         c = piacn.split('Cosa non è piaciuto · ')
                         rn = ''.join(c)
-                    print(pos[0].text)
-                    print(pos[1].text)
+                    if args.verbose:
+                        print(pos[0].text)
+                        print(pos[1].text)
                 else:
                     rp = pos[0].find_element_by_class_name('c-review__body').text
                     comm = 'Il cliente non ha lasciato un commento'
@@ -109,7 +114,8 @@ def recen():
                     if piac in rp:
                         c = piac.split('Cosa è piaciuto ·')
                         rp = ''.join(c)
-                    print(pos[0].text)
+                    if args.verbose:
+                        print(pos[0].text)
             except WDE:
                 print('no rec')
 
@@ -138,9 +144,9 @@ def recen():
         except:
             break
     print('fine recensioni')
+#funzione che apre la pagina di ogni singolo hotel dove verranno poi estratte le informazioni
 def entraHotel():
     numHt = driver.find_elements_by_class_name('sr_item')
-    #se indentato apre tutte le pagine degli hotel
     for i in range(0,len(numHt)):
         s = numHt[i].find_element_by_class_name('sr-hotel__name')
 
@@ -151,6 +157,7 @@ def entraHotel():
         estrazioneInfoHotel()
         time.sleep(1)
     time.sleep(3)
+#funzione che seleziona 5km come distanza dal centro
 def seleziona5km():
     try:
         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
@@ -168,7 +175,7 @@ def seleziona5km():
     time.sleep(2)
     km.click()
     time.sleep(2)
-
+#funzione che estrae informazioni dagli hotel
 def estrazioneInfoHotel():
     for i in driver.window_handles:
         driver.switch_to.window(i)
@@ -186,14 +193,13 @@ def estrazioneInfoHotel():
         indirizzo = driver.find_element_by_class_name('hp_address_subtitle')
     except WDE:
         print("non ci sono")
-
-
     try:
         l=re.findall(r'(h.*)\?', driver.current_url)
         x= l[0]
         hturl = (x,)
     except WDE:
         print("err ")
+    #estrae latitudine e longitudine dal file javaScript
     javaScript = "return(booking.env.b_map_center_latitude)"
     js = driver.execute_script(javaScript)
     javaScript1 = "return(booking.env.b_map_center_longitude)"
@@ -272,12 +278,12 @@ def estrazioneInfoHotel():
     #estrae tutte le categorie e per ognuna le sue info
     try:
         checklistSection = driver.find_elements_by_class_name('facilitiesChecklistSection')
-        print(len(checklistSection))
         ele = ''
 
         for i in range(0,len(checklistSection)):
             h5 = checklistSection[i].find_element_by_tag_name('h5')
-            print(h5.text)
+            if args.verbose:
+                print(h5.text)
 
             for j in range(0,len(checklistSection[i].find_elements_by_tag_name('li'))):
                 elementi = checklistSection[i].find_elements_by_tag_name('li')[j].text
@@ -316,7 +322,8 @@ def estrazioneInfoHotel():
                 except mysql.connector.Error as error:
                     print("Failed to insert record into accomodationservice table {}".format(error))
                 ele = ele + elementi +'; '
-                print(elementi)
+                if args.verbose:
+                    print(elementi)
 
             print("MySQL connection is closed")
     except WDE:
@@ -327,6 +334,7 @@ def estrazioneInfoHotel():
         print('errore recensioni')
     driver.close()
     driver.switch_to.window(main_page)
+#funzione che normalizza la data che ne permette l'inserimento nel DB
 def normalizzaData(x):
     dataSeparata = x.split()
     giorno = dataSeparata[0]
