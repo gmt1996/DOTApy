@@ -22,12 +22,13 @@ parser.add_argument("-m", type=int, required= True, help="seleziona per quanti m
 args = parser.parse_args()
 config = configparser.ConfigParser()
 configurazione = config.read('config.ini')
-hostDB = config['mysqlDB']['host']
-userDB = config['mysqlDB']['user']
-passwdDB = config['mysqlDB']['pass']
-dbDB = config['mysqlDB']['db']
 if not configurazione:
     exit('file config.ini non trovato')
+else:
+    hostDB = config['mysqlDB']['host']
+    userDB = config['mysqlDB']['user']
+    passwdDB = config['mysqlDB']['pass']
+    dbDB = config['mysqlDB']['db']
 if not hostDB or not userDB or not passwdDB or not dbDB:
     exit('parametri file config.ini non definiti')
 options = webdriver.ChromeOptions()
@@ -118,10 +119,10 @@ def data(inpu,inpu1):
                 dataPernottamento = (format,)
                 cittaEstrazione = inpu
                 try:
-                    connection = mysql.connector.connect(host = config['mysqlDB']['host'],
-                           user = config['mysqlDB']['user'],
-                           passwd = config['mysqlDB']['pass'],
-                           db = config['mysqlDB']['db'])
+                    connection = mysql.connector.connect(host = hostDB,
+                           user = userDB,
+                           passwd = passwdDB,
+                           db = dbDB)
                     time.sleep(3)
 
                     mySql_insert_query = """INSERT INTO urlHotel (url, data, citta)

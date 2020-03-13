@@ -11,23 +11,23 @@ import re
 import sys
 import argparse
 options = webdriver.ChromeOptions()
-#options.add_argument('headless')
 #windows
 driver = webdriver.Chrome( options = options)
 #linux inserire path chromedriver
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 parser = argparse.ArgumentParser()
-parser.add_argument("-c", type=str,required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
+parser.add_argument("-c", type=str, required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
 
 args = parser.parse_args()
 config = configparser.ConfigParser()
 configurazione = config.read('config.ini')
-hostDB = config['mysqlDB']['host']
-userDB = config['mysqlDB']['user']
-passwdDB = config['mysqlDB']['pass']
-dbDB = config['mysqlDB']['db']
 if not configurazione:
     exit('file config.ini non trovato')
+else:
+    hostDB = config['mysqlDB']['host']
+    userDB = config['mysqlDB']['user']
+    passwdDB = config['mysqlDB']['pass']
+    dbDB = config['mysqlDB']['db']
 if not hostDB or not userDB or not passwdDB or not dbDB:
     exit('parametri file config.ini non definiti')
 
