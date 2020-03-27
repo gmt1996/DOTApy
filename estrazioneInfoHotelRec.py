@@ -12,6 +12,7 @@ import sys
 import argparse
 options = webdriver.ChromeOptions()
 options.add_argument('headless')
+options.add_argument('--lang=it')
 #windows
 driver = webdriver.Chrome( options = options)
 #linux inserire path chromedriver
@@ -29,7 +30,7 @@ else:
     userDB = config['mysqlDB']['user']
     passwdDB = config['mysqlDB']['pass']
     dbDB = config['mysqlDB']['db']
-if not hostDB or not userDB or not passwdDB or not dbDB:
+if not hostDB or not userDB  or not dbDB:
     exit('parametri file config.ini non definiti')
 
 #apre la pagina web all'indirizzo specificato
