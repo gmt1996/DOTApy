@@ -16,7 +16,7 @@ from utility import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", type=str, required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
-parser.add_argument("-d", type=str, required= True, help="seleziona il mese di inizio con il formato mese anno es: 'maggio 2020'")
+parser.add_argument("-d", type=str, required= True, help='seleziona il mese di inizio con il formato mese anno es: "maggio 2020"')
 parser.add_argument("-m", type=int, required= True, help="seleziona per quanti mesi effettuare l'estrazione es: 6")
 
 args = parser.parse_args()
