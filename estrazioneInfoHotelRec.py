@@ -325,7 +325,7 @@ def estrazioneInfoHotel():
                 if args.verbose:
                     print(elementi)
 
-            print("MySQL connection is closed")
+            print("Fine estrazione informazioni, inizio estrazione recensioni")
     except WDE:
         print("err recensioni")
     try:
