@@ -60,6 +60,7 @@ try:
             ht = driver.find_element_by_xpath('//*[@id="hotellist_inner"]')
             numHt = ht.find_elements_by_class_name('sr_item')
             print(len(numHt))
+            #aggiunte delle attese con time.sleep per permettere al programma e al motore di ricerca di eseguire i calcoli in maniera corretta
             time.sleep(3)
             for i in range(0, len(numHt)):
                 o = numHt[i].find_element_by_class_name('sr-hotel__name').text

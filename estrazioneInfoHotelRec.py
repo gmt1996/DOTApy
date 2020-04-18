@@ -19,8 +19,15 @@ driver = webdriver.Chrome( options = options)
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", type=str,required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
-parser.add_argument("--verbose", help="aumenta l'output", action="store_true")
+parser.add_argument('--verbose', '-v', action='count', default=0, , help="si utilizza per determinare il livello delle stampe in output aggiungendo uno o due v come parametro. -v primo livello che stampa errori e milestones, -vv stampa i precedenti più altri messaggi di debug, di default stampa solo errori")
 args = parser.parse_args()
+
+verbose = 0
+if args.verbose:
+	verbose = args.verbose
+def debug(stringa, livello):
+	if livello <= verbose:
+		print(stringa)
 config = configparser.ConfigParser()
 configurazione = config.read('config.ini')
 if not configurazione:
@@ -41,6 +48,7 @@ connection = mysql.connector.connect(host = hostDB,
        user = userDB,
        passwd = passwdDB,
        db = dbDB)
+#aggiunte delle attese con time.sleep per permettere al programma e al motore di ricerca di eseguire i calcoli in maniera corretta
 time.sleep(3)
 #funzione che estrae le tutte le recensioni presenti ordinate dalle più recenti
 def recen():
@@ -57,8 +65,9 @@ def recen():
         time.sleep(1)
         listaRec = driver.find_element_by_class_name('review_list')
         numRec = listaRec.find_elements_by_class_name('review_list_new_item_block')
-        if args.verbose:
-            print(len(numRec))
+        debug(len(numRec),2)
+        #if args.verbose:
+        #    print(len(numRec))
 
         for i in range(0,len(numRec)):
             name = numRec[i].find_element_by_class_name('bui-avatar-block__title').text
@@ -72,13 +81,19 @@ def recen():
             pos = recens.find_elements_by_class_name('c-review__row')
             score = numRec[i].find_element_by_class_name('bui-review-score__badge').text
             dataRec = numRec[i].find_element_by_class_name('c-review-block__date').text
+            Lang = numRec[i].find_element_by_class_name('c-review__body')
+            try:
+                LinguaRec = Lang.get_attribute('lang')
+            except WDE:
+                print('Non è presente la lingua della recensione')
             normalizzatore = 'Recensione: '
             if normalizzatore in dataRec:
                 temp = dataRec.split(normalizzatore)
                 dataRec = ''.join(temp)
                 dataRecensioneNormalizzata = normalizzaData(dataRec)
-            if args.verbose:
-                print(dataRecensioneNormalizzata)
+            debug(dataRecensioneNormalizzata,2)
+            #if args.verbose:
+            #    print(dataRecensioneNormalizzata)
             rp = ''
             rn = ''
 
@@ -102,9 +117,10 @@ def recen():
                     if piacn in rn:
                         c = piacn.split('Cosa non è piaciuto · ')
                         rn = ''.join(c)
-                    if args.verbose:
-                        print(pos[0].text)
-                        print(pos[1].text)
+                    debug(pos[1].text,2)
+                    #if args.verbose:
+                    #    print(pos[0].text)
+                    #    print(pos[1].text)
                 else:
                     rp = pos[0].find_element_by_class_name('c-review__body').text
                     comm = 'Il cliente non ha lasciato un commento'
@@ -115,10 +131,12 @@ def recen():
                     if piac in rp:
                         c = piac.split('Cosa è piaciuto ·')
                         rp = ''.join(c)
-                    if args.verbose:
-                        print(pos[0].text)
+                    debug(pos[0].text,2)
+                    #if args.verbose:
+                    #    print(pos[0].text)
             except WDE:
-                print('no rec')
+                debug("recensione non valida per l'estrazione", 2)
+                #print('no rec')
 
             time.sleep(2)
             try:
@@ -126,17 +144,19 @@ def recen():
                 cursor.execute("SELECT max(IDHotel) from accomodation")
                 risultato = cursor.fetchone()
                 cursor.close()
-                mySql_insert_query = """INSERT INTO accomodationrecensioni (idhotel, nome, titolo, recensionePos, recensioneNeg, score, nazione, dataRecensione)
+                mySql_insert_query = """INSERT INTO accomodationrecensioni (idhotel, nome, titolo, recensionePos, recensioneNeg, score, nazione, dataRecensione, LinguaRecensione)
                                     VALUES
-                              (%s, %s, %s, %s, %s, %s, %s, %s) """
+                              (%s, %s, %s, %s, %s, %s, %s, %s, %s) """
                 cursor = connection.cursor()
-                result = cursor.execute(mySql_insert_query, (risultato[0],name,title,rp,rn,score,nation, dataRecensioneNormalizzata))
+                result = cursor.execute(mySql_insert_query, (risultato[0],name,title,rp,rn,score,nation, dataRecensioneNormalizzata, LinguaRec))
                 connection.commit()
-                print("Record inserted successfully into accomodationrecensioni table")
+                debug("Record inserted successfully into accomodationrecensioni table",1)
+                #print("Record inserted successfully into accomodationrecensioni table")
                 cursor.close()
 
             except mysql.connector.Error as error:
-                 print("Failed to insert record into accomodationrecensioni table {}".format(error))
+                debug("Failed to insert record into accomodationrecensioni table {}".format(error),1)
+                 #print("Failed to insert record into accomodationrecensioni table {}".format(error))
 
         try:
             next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')
@@ -144,7 +164,8 @@ def recen():
             time.sleep(2)
         except:
             break
-    print('fine recensioni')
+    debug('fine recensioni',1)
+    #print('fine recensioni')
 #funzione che apre la pagina di ogni singolo hotel dove verranno poi estratte le informazioni
 def entraHotel():
     numHt = driver.find_elements_by_class_name('sr_item')
@@ -164,12 +185,14 @@ def seleziona5km():
         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
         coo.click()
     except WDE:
-        print("Not able to find element")
+        debug("Not able to find element",2)
+        #print("Not able to find element")
     try:
         coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
         coo1.click()
     except WDE:
-        print("Not able to find element")
+        debug("Not able to find element",2)
+        #print("Not able to find element")
     #imposta la distanza a un km
     #km1 = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[1]/label/div')
     km = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[3]/label/div')
@@ -185,7 +208,8 @@ def estrazioneInfoHotel():
     try:
         nomeHt = driver.find_element_by_class_name('hp__hotel-name')
     except WDE:
-        print("no nome")
+        debug("errore estrazione nome hotel", 0)
+        #print("no nome")
 
     #prende indirizzo
     indirizz = driver.find_element_by_class_name('hp_address_subtitle').text
@@ -193,13 +217,15 @@ def estrazioneInfoHotel():
     try:
         indirizzo = driver.find_element_by_class_name('hp_address_subtitle')
     except WDE:
-        print("non ci sono")
+        debug("errore estrazione indirizzo", 0)
+        #print("non ci sono indirizzi presnti")
     try:
         l=re.findall(r'(h.*)\?', driver.current_url)
         x= l[0]
         hturl = (x,)
     except WDE:
-        print("err ")
+        debug("errore estrazione url", 0)
+        #print("errore estrazione url")
     #estrae latitudine e longitudine dal file javaScript
     javaScript = "return(booking.env.b_map_center_latitude)"
     js = driver.execute_script(javaScript)
@@ -215,11 +241,13 @@ def estrazioneInfoHotel():
         global NomeHote
         result = cursor.execute(mySql_insert_query, (NomeHote[0], indiri[0], hturl[0], js, js1))
         connection.commit()
-        print("Record inserted successfully into accomodation table")
+        debug("Record inserted successfully into accomodation table",1)
+        #print("Record inserted successfully into accomodation table")
         cursor.close()
 
     except mysql.connector.Error as error:
-        print("Failed to insert record into accomodation table {}".format(error))
+        debug("Failed to insert record into accomodation table {}".format(error),1)
+        #print("Failed to insert record into accomodation table {}".format(error))
 
     #estrae tutte le cose che piacciono di più ai vistatori
     try:
@@ -239,14 +267,17 @@ def estrazioneInfoHotel():
                 cursor = connection.cursor()
                 result = cursor.execute(mySql_insert_query, (risultato[0],gsd))
                 connection.commit()
-                print("Record inserted successfully into accomodationpazziper table")
+                debug("Record inserted successfully into accomodationpazziper table",2)
+                #print("Record inserted successfully into accomodationpazziper table")
                 cursor.close()
 
             except mysql.connector.Error as error:
-                print("Failed to insert record into accomodationpazziper table {}".format(error))
+                debug("Failed to insert record into accomodationpazziper table {}".format(error),1)
+                #print("Failed to insert record into accomodationpazziper table {}".format(error))
             pazzi = pazzi + pazziper[i].text + ', '
     except WDE:
-        print("err pazzi per")
+        debug("errore estrazione sezione pazzi per", 0)
+        #print("err pazzi per")
 
     #estrae i buoni motivi per scegliere la struttura
     try:
@@ -266,15 +297,17 @@ def estrazioneInfoHotel():
                 cursor = connection.cursor()
                 result = cursor.execute(mySql_insert_query, (risultato[0],fd))
                 connection.commit()
-                print("Record inserted successfully into accomodationmotivi table")
+                debug("Record inserted successfully into accomodationmotivi table",1)
+                #print("Record inserted successfully into accomodationmotivi table")
                 cursor.close()
 
 
             except mysql.connector.Error as error:
-                print("Failed to insert record into accomodationmotivi table {}".format(error))
+                debug("Failed to insert record into accomodationmotivi table {}".format(error),1)
+                #print("Failed to insert record into accomodationmotivi table {}".format(error))
             mot = mot + motivi3[i].text + '; '
     except WDE:
-        print("err motivi")
+        debug("errore estrazione sezione pazzi per", 0)
 
     #estrae tutte le categorie e per ognuna le sue info
     try:
@@ -283,8 +316,9 @@ def estrazioneInfoHotel():
 
         for i in range(0,len(checklistSection)):
             h5 = checklistSection[i].find_element_by_tag_name('h5')
-            if args.verbose:
-                print(h5.text)
+            debug(h5.text,2)
+            #if args.verbose:
+            #    print(h5.text)
 
             for j in range(0,len(checklistSection[i].find_elements_by_tag_name('li'))):
                 elementi = checklistSection[i].find_elements_by_tag_name('li')[j].text
@@ -297,10 +331,12 @@ def estrazioneInfoHotel():
                     cursor = connection.cursor()
                     result = cursor.execute(mySql_insert_query, e)
                     connection.commit()
-                    print("Record inserted successfully into servizi table")
+                    debug("Record inserted successfully into servizi table",1)
+                    #print("Record inserted successfully into servizi table")
                     cursor.close()
                 except mysql.connector.Error as error:
-                    print("Failed to insert record into servizi table {}".format(error))
+                    debug("Failed to insert record into servizi table {}".format(error),1)
+                    #print("Failed to insert record into servizi table {}".format(error))
                 try:
                     cursor = connection.cursor()
                     cursor.execute("SELECT max(IDHotel) from accomodation")
@@ -316,23 +352,28 @@ def estrazioneInfoHotel():
                     cursor = connection.cursor()
                     result = cursor.execute(mySql_insert_query, (risultato[0], risultato1[0]))
                     connection.commit()
-                    print("Record inserted successfully into accomodationservice table")
+                    debug("Record inserted successfully into accomodationservice table",1)
+                    #print("Record inserted successfully into accomodationservice table")
                     cursor.close()
 
 
                 except mysql.connector.Error as error:
-                    print("Failed to insert record into accomodationservice table {}".format(error))
+                    debug("Failed to insert record into accomodationservice table {}".format(error),1)
+                    #print("Failed to insert record into accomodationservice table {}".format(error))
                 ele = ele + elementi +'; '
-                if args.verbose:
-                    print(elementi)
-
-            print("Fine estrazione informazioni, inizio estrazione recensioni")
+                debug(elementi,2)
+                #if args.verbose:
+                #    print(elementi)
+            debug("Fine estrazione informazioni, inizio estrazione recensioni",1)
+            #print("Fine estrazione informazioni, inizio estrazione recensioni")
     except WDE:
-        print("err recensioni")
+        debug("err recensioni",0)
+        #print("err recensioni")
     try:
         recen()
     except WDE:
-        print('errore recensioni')
+        debug("errore recensioni",0)
+        #print('errore recensioni')
     driver.close()
     driver.switch_to.window(main_page)
 #funzione che normalizza la data che ne permette l'inserimento nel DB
@@ -357,12 +398,12 @@ def pagSuccessiva(a):
         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
         coo.click()
     except WDE:
-        print("Not able to find element")
+        debug("Not able to find element",2)
     try:
         coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
         coo1.click()
     except WDE:
-        print("Not able to find element")
+        debug("Not able to find element",2)
 
     #selettore freccia avanti pag
     pag = driver.find_element_by_css_selector('#search_results_table > div.bui-pagination.results-paging > nav > ul > li.bui-pagination__item.bui-pagination__next-arrow > a')
@@ -373,12 +414,12 @@ try:
     coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
     coo.click()
 except WDE:
-    print("Not able to find element")
+    debug("Not able to find element",2)
 try:
     coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
     coo1.click()
 except WDE:
-    print("Not able to find element")
+    debug("Not able to find element",2)
 passo0 = driver.find_element_by_class_name('c-autocomplete__input')
 passo0.send_keys(args.c)
 passo0.send_keys(Keys.ENTER)
@@ -391,11 +432,13 @@ try:
             pagSuccessiva(a)
             time.sleep(6)
         except WDE:
-            print("stop")
+            debug("errore estrazione delle informazioni, info non estratte", 0)
+            #print("stop")
 except WDE:
     entraHotel()
     pagSuccessiva(a)
-    print("finito estrarre info hotel")
+    debug("finito estrazione info hotel e recensioni", 0)
+    #print("finito estrarre info hotel e recensioni")
 if(connection.is_connected()):
     cursor.close()
     connection.close()
