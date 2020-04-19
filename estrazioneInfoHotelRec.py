@@ -1,4 +1,4 @@
-#estrae info hotel
+#estrazione informazioni e recnsioni hotel
 
 import configparser
 import time
@@ -19,7 +19,8 @@ driver = webdriver.Chrome( options = options)
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", type=str,required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
-parser.add_argument('--verbose', '-v', action='count', default=0, , help="si utilizza per determinare il livello delle stampe in output aggiungendo uno o due v come parametro. -v primo livello che stampa errori e milestones, -vv stampa i precedenti più altri messaggi di debug, di default stampa solo errori")
+parser.add_argument('--verbose', '-v', action='count', default=0 , help="si utilizza per determinare il livello delle stampe in output aggiungendo uno o due v come parametro. -v primo livello che stampa errori e milestones, -vv stampa i precedenti più altri messaggi di debug, di default stampa solo errori")
+parser.add_argument('-nr', type= int, default=1000, help='numero di pagine per hotel di recensioni da estrarre, se non specificato estrarrà tutte le recensioni')
 args = parser.parse_args()
 
 verbose = 0
@@ -61,7 +62,9 @@ def recen():
     recenti.click()
     time.sleep(2)
     next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')
-    while(next):
+    numeroRecensioni = args.nr
+    while(numeroRecensioni>0):
+	#while(next):
         time.sleep(1)
         listaRec = driver.find_element_by_class_name('review_list')
         numRec = listaRec.find_elements_by_class_name('review_list_new_item_block')
@@ -157,7 +160,7 @@ def recen():
             except mysql.connector.Error as error:
                 debug("Failed to insert record into accomodationrecensioni table {}".format(error),1)
                  #print("Failed to insert record into accomodationrecensioni table {}".format(error))
-
+        numeroRecensioni = numeroRecensioni - 1
         try:
             next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')
             next.click()
