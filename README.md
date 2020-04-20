@@ -26,7 +26,7 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 ## Procedimento per l'estrazione informazioni e recensioni degli hotel
 - Importare la struttura del database utilizzando il file `DBstruttura.sql`, creando così il DB (verificare che non sia presente un omonimo DB).
 - Modificare il file `config.ini` secondo le proprie credenziali.
-- Eseguire il file `estrazioneInfoHotel.py` o `estrazioneInfoHotelRec.py`(che permette l'estrazione delle recensioni).
+- Eseguire il file `estrazioneInfoHotelRec.py`.
   * Argomenti utilizzabili:
     * **-c** seguito dalla città desiderata. **obbligatorio**
     * **-v** per il prinmo livello di debug, **-vv** per il secondo con conseguente aumento di messaggi in output. **facoltativo** se omesso mostrerà in output solo messaggi di errore.
@@ -38,10 +38,8 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 - Importare la struttura del database utilizzando il file `DBstruttura.sql`, creando così il DB (verificare che non sia presente un omonimo DB).
 - Modificare il file `config.ini` secondo le proprie credenziali.
 - Eseguire il file `estrazioneUrl.py` inserendo in input: **-c** seguito dalla città desiderata, **-d** seguito ,tra doppi apici, da mese e anno dai quali si desidera iniziare l'estrazione e **-m** seguito dal numero di mesi per cui effettuare l'estrazione.
-
-
-**Esempio: python estrazioneUrl.py -c pisa -d "maggio 2020" -m 6**
+Esempio: **python estrazioneUrl.py -c pisa -d "maggio 2020" -m 6**
 ![estrazioneUrl](https://user-images.githubusercontent.com/51764993/76440538-47eef480-63be-11ea-9766-8862608a9321.png)
 - Eseguire il file `estrazionePrezzo.py` che permette l'estrazione dei prezzi di tutti gli hotel per il periodo selezionato con il programma `estrazioneUrl.py`.
-**Esempio: python estrazionePrezzo.py**
+Esempio: **python estrazionePrezzo.py**
 ![estrazionePrezzo](https://user-images.githubusercontent.com/51764993/76615809-0deb3300-6523-11ea-838d-a250a9ec145b.png)
