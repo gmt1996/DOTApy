@@ -32,7 +32,7 @@ CREATE TABLE `accomodation` (
   `latitudine` varchar(56) DEFAULT NULL,
   `longitudine` varchar(56) DEFAULT NULL,
   PRIMARY KEY (`IDhotel`)
-) ENGINE=InnoDB AUTO_INCREMENT=668 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=855 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,7 +92,8 @@ CREATE TABLE `accomodationrecensioni` (
   `recensioneNeg` varchar(1024) DEFAULT NULL,
   `score` varchar(16) DEFAULT NULL,
   `nazione` varchar(56) DEFAULT NULL,
-  `dataRecensione` date DEFAULT NULL
+  `dataRecensione` date DEFAULT NULL,
+  `LinguaRecensione` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,7 +123,7 @@ CREATE TABLE `servizi` (
   `servizio` varchar(128) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `value_UNIQUE` (`servizio`)
-) ENGINE=InnoDB AUTO_INCREMENT=27079 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=34501 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,7 +139,7 @@ CREATE TABLE `urlhotel` (
   `data` date DEFAULT NULL,
   `citta` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=379 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=392 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,4 +159,4 @@ CREATE TABLE `urlhotel` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-12 17:55:38
+-- Dump completed on 2020-04-20 16:30:58
