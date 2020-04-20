@@ -34,6 +34,7 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
     * **-nr** seguito da un numero intero per stabilire quante pagine di recensioni per ogni hotel estrarre. **facoltativo** se non specificato verranno estratte informazioni da tutte le pagini disponibili.
 - Esempio: **python estrazioneInfoHotel -c pisa -ph 2 -nr 1 -vv**
 ![estrazioneInfoHotel](https://user-images.githubusercontent.com/51764993/76440765-a4eaaa80-63be-11ea-8a33-f97a74a7fbfd.png)
+...
 ## Procedimento per l'estrazione dei prezzi, in una fascia temporale definita, degli hotel
 - Importare la struttura del database utilizzando il file `DBstruttura.sql`, creando così il DB (verificare che non sia presente un omonimo DB).
 - Modificare il file `config.ini` secondo le proprie credenziali.
