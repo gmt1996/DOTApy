@@ -28,12 +28,10 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 - Modificare il file `config.ini` secondo le proprie credenziali.
 - Eseguire il file `estrazioneInfoHotel.py` o `estrazioneInfoHotelRec.py`(che permette l'estrazione delle recensioni).
   * Argomenti utilizzabili:
-    * **-c** seguito dalla città desiderata.
-    * **-v** per il prinmo livello di debug, **-vv** per il secondo
-    * **-ph** seguito da un numero intero per stabilire quante pagine di hotel estrarre, se omesso si esguirà l'estrazione su tutte.
-    * **-nr** seguito da un numero intero per stabilire quante pagine di recensioni per ogni hotel estrarre, se non specificato verranno estratte tutte.
-
- inserendo in input **-c** seguito dalla città desiderata, per ricevere messagi importanti in output inserire **-v** e nel caso in cui se si volesse ricevere tutte le informazioni di debug in output inserire **-vv**.
+    * **-c** seguito dalla città desiderata. **obbligatorio**
+    * **-v** per il prinmo livello di debug, **-vv** per il secondo con conseguente aumento di messaggi in output.**facoltativo** se omesso mostrerà in output solo messaggi di errore.
+    * **-ph** seguito da un numero intero per stabilire quante pagine di hotel estrarre. **facoltativo** se omesso sarà esguita l'estrazione su tutte.
+    * **-nr** seguito da un numero intero per stabilire quante pagine di recensioni per ogni hotel estrarre. **facoltativo** se non specificato verranno estratte informazioni da tutte le pagini disponibili.
 **Esempio: python estrazioneInfoHotel -c pisa -ph 2 -nr 1 -vv**
 ![estrazioneInfoHotel](https://user-images.githubusercontent.com/51764993/76440765-a4eaaa80-63be-11ea-8a33-f97a74a7fbfd.png)
 ## Procedimento per l'estrazione dei prezzi, in una fascia temporale definita, degli hotel
