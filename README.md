@@ -29,7 +29,7 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 - Eseguire il file `estrazioneInfoHotel.py` o `estrazioneInfoHotelRec.py`(che permette l'estrazione delle recensioni).
   * Argomenti utilizzabili:
     * **-c** seguito dalla città desiderata. **obbligatorio**
-    * **-v** per il prinmo livello di debug, **-vv** per il secondo con conseguente aumento di messaggi in output.**facoltativo** se omesso mostrerà in output solo messaggi di errore.
+    * **-v** per il prinmo livello di debug, **-vv** per il secondo con conseguente aumento di messaggi in output. **facoltativo** se omesso mostrerà in output solo messaggi di errore.
     * **-ph** seguito da un numero intero per stabilire quante pagine di hotel estrarre. **facoltativo** se omesso sarà esguita l'estrazione su tutte.
     * **-nr** seguito da un numero intero per stabilire quante pagine di recensioni per ogni hotel estrarre. **facoltativo** se non specificato verranno estratte informazioni da tutte le pagini disponibili.
 **Esempio: python estrazioneInfoHotel -c pisa -ph 2 -nr 1 -vv**
