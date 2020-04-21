@@ -29,16 +29,21 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 - Eseguire il file `estrazioneInfoHotelRec.py`.
   * Argomenti utilizzabili:
     * **-c** seguito dalla città desiderata. **obbligatorio**
-    * **-v** per il prinmo livello di debug, **-vv** per il secondo con conseguente aumento di messaggi in output. **facoltativo** se omesso mostrerà in output solo messaggi di errore.
-    * **-ph** seguito da un numero intero per stabilire quante pagine di hotel estrarre. **facoltativo** se omesso sarà esguita l'estrazione su tutte.
-    * **-nr** seguito da un numero intero per stabilire quante pagine di recensioni per ogni hotel estrarre. **facoltativo** se non specificato verranno estratte informazioni da tutte le pagini disponibili.
+    * **-v** per il primo livello di debug, **-vv** per il secondo con conseguente aumento di messaggi in output. **facoltativo** se omesso mostrerà in output solo messaggi di errore.
+    * **-ph** seguito da un numero intero per stabilire quante pagine di hotel estrarre. **Facoltativo** se omesso sarà esguita l'estrazione su tutte.
+    * **-nr** seguito da un numero intero per stabilire quante pagine di recensioni per ogni hotel estrarre. **Facoltativo** se non specificato verranno estratte informazioni da tutte le pagini disponibili.
 - Esempio: **python estrazioneInfoHotel -c pisa -ph 2 -nr 1 -vv**
 ![estrazioneInfoHotel](https://user-images.githubusercontent.com/51764993/76440765-a4eaaa80-63be-11ea-8a33-f97a74a7fbfd.png)
 ---
 ## Procedimento di estrazione dei prezzi per gli hotel di una determinata città
 - Importare la struttura del database utilizzando il file `DBstruttura.sql`, creando così il DB (verificare che non sia presente un omonimo DB).
 - Modificare il file `config.ini` secondo le proprie credenziali.
-- Eseguire il file `estrazioneUrl.py` inserendo in input: **-c** seguito dalla città desiderata, **-d** seguito ,tra doppi apici, da mese e anno dai quali si desidera iniziare l'estrazione e **-m** seguito dal numero di mesi per cui effettuare l'estrazione.
+- Eseguire il file `estrazioneUrl.py`
+  * Argomenti utilizzabili:
+    * **-c** seguito dalla città desiderata.
+    * **-d** seguito ,tra doppi apici, da mese e anno dai quali si desidera iniziare l'estrazione.
+    * **-m** seguito dal numero di mesi per cui effettuare l'estrazione.
+inserendo in input: **-c** seguito dalla città desiderata, **-d** seguito ,tra doppi apici, da mese e anno dai quali si desidera iniziare l'estrazione e **-m** seguito dal numero di mesi per cui effettuare l'estrazione.
 Esempio: **python estrazioneUrl.py -c pisa -d "maggio 2020" -m 6**
 ![estrazioneUrl](https://user-images.githubusercontent.com/51764993/76440538-47eef480-63be-11ea-9766-8862608a9321.png)
 - Eseguire il file `estrazionePrezzo.py` che permette l'estrazione dei prezzi di tutti gli hotel per il periodo selezionato con il programma `estrazioneUrl.py`.
