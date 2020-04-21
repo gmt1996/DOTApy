@@ -7,7 +7,7 @@ Il secondo, che può essere o meno correlato con il primo, riguarda l'estrazione
 ## Requisiti
 Usare **python3**
 
-Installare le seguenti librerie con **pip** https://pip.pypa.io/en/stable/quickstart/
+Installare le seguenti librerie utilizzando **pip** https://pip.pypa.io/en/stable/quickstart/
 
 - `selenium` https://selenium-python.readthedocs.io/
 - `mysql connector` https://dev.mysql.com/doc/connector-python/en/connector-python-installation-binary.html
