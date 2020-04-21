@@ -23,7 +23,7 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 - `utility.py`: file python contenente funzioni utilizzate nel file *estrazioneUrl.py*.
 - `run.sh`: file con estensione sh che esegue in ordine i file: *estrazioneUrl.py*, *estrazioneInfoHotel.py*, *estrazionePrezzo.py*.
 
-## Procedimento per l'estrazione informazioni e recensioni degli hotel
+## Procedimento di estrazione delle informazioni e delle recensioni per gli hotel di una determinata città
 - Importare la struttura del database utilizzando il file `DBstruttura.sql`, creando così il DB (verificare che non sia presente un omonimo DB).
 - Modificare il file `config.ini` secondo le proprie credenziali.
 - Eseguire il file `estrazioneInfoHotelRec.py`.
@@ -35,7 +35,7 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
 - Esempio: **python estrazioneInfoHotel -c pisa -ph 2 -nr 1 -vv**
 ![estrazioneInfoHotel](https://user-images.githubusercontent.com/51764993/76440765-a4eaaa80-63be-11ea-8a33-f97a74a7fbfd.png)
 ---
-## Procedimento per l'estrazione dei prezzi, in una fascia temporale definita, degli hotel
+## Procedimento di estrazione dei prezzi per gli hotel di una determinata città
 - Importare la struttura del database utilizzando il file `DBstruttura.sql`, creando così il DB (verificare che non sia presente un omonimo DB).
 - Modificare il file `config.ini` secondo le proprie credenziali.
 - Eseguire il file `estrazioneUrl.py` inserendo in input: **-c** seguito dalla città desiderata, **-d** seguito ,tra doppi apici, da mese e anno dai quali si desidera iniziare l'estrazione e **-m** seguito dal numero di mesi per cui effettuare l'estrazione.
