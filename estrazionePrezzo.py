@@ -1,4 +1,4 @@
-#estrae nome hotel e prezzo di tutte le pagine per un anno
+#estrazione nome e prezzo per tutti gli hotel
 
 import configparser
 import time

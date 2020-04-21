@@ -1,4 +1,4 @@
-#estrae tutti gli url
+#estrazione delle url conteneti le pagine di booking per tutto il periodo di date scelto
 import configparser
 import mysql.connector
 from mysql.connector import Error
@@ -146,7 +146,7 @@ def data(inpu,inpu1):
                     print("Failed to insert record into urlht table {}".format(error))
                 time.sleep(3)
 
-                #torna alla pagina prima
+                #torna alla pagina precedente
                 driver.back()
                 time.sleep(1)
                 driver.implicitly_wait(5)

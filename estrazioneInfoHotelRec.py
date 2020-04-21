@@ -1,4 +1,4 @@
-#estrazione informazioni e recnsioni hotel
+#estrazione informazioni e recensioni hotel
 
 import configparser
 import time
