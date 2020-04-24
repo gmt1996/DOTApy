@@ -32,8 +32,8 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
   * Argomenti utilizzabili:
     * **-c** seguito dalla città desiderata. **Obbligatorio**.
     * **-v** per il primo livello di debug. **-vv** per il secondo con conseguente aumento di messaggi in output. Se omesso mostrerà in output solo messaggi di errore. **Facoltativo**.
-    * **-ph** seguito da un numero intero per stabilire quante pagine di hotel estrarre. Se omesso sarà esguita l'estrazione su tutte.**Facoltativo**.
-    * **-nr** seguito da un numero intero per stabilire quante pagine di recensioni per ogni hotel estrarre. Se non specificato verranno estratte informazioni da tutte le pagini disponibili.**Facoltativo**.
+    * **-ph** seguito da un numero intero per stabilire quante pagine di hotel estrarre. Se omesso sarà esguita l'estrazione su tutte. **Facoltativo**.
+    * **-nr** seguito da un numero intero per stabilire quante pagine di recensioni per ogni hotel estrarre. Se non specificato verranno estratte informazioni da tutte le pagini disponibili. **Facoltativo**.
 - Esempio: **python estrazioneInfoHotelRec -c pisa -ph 2 -nr 1 -vv**
 ![estrazioneInfoHotel](https://user-images.githubusercontent.com/51764993/76440765-a4eaaa80-63be-11ea-8a33-f97a74a7fbfd.png)
 ---
