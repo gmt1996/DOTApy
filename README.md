@@ -1,7 +1,7 @@
 # Scraper ota
 <!---Applicazione per l'estrazione automatica dei dati.-->
 Software sviluppato in Python per l'estrazione automatica dei dati.
-L'applicazione si concentra su due diversi obbiettivi: il primo riguarda l'estrazione di informazioni e di recensioni degli hotel per una determinata città, il secondo (che può essere o meno correlato con il primo) riguarda l'estrazione dei prezzi degli hotel per un determinato periodo di tempo e per una determinata città.
+L'applicazione si concentra su due diversi obbiettivi: il primo riguarda l'estrazione di informazioni e di recensioni degli hotel per una determinata città, il secondo (che può essere o meno correlato con il primo) riguarda l'estrazione dei prezzi degli hotel per un periodo di tempo prestabilito.
 ## Requisiti
 Usare **python3**
 
