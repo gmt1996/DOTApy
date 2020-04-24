@@ -35,7 +35,7 @@ Scaricare il driver per la vostra versione di Google Chrome da questo link https
     * **-ph** seguito da un numero intero per stabilire quante pagine di hotel estrarre. Se omesso sarà esguita l'estrazione su tutte. **Facoltativo**.
     * **-nr** seguito da un numero intero per stabilire quante pagine di recensioni per ogni hotel estrarre. Se non specificato verranno estratte informazioni da tutte le pagini disponibili. **Facoltativo**.
 - Esempio: **python estrazioneInfoHotelRec.py -c pisa -ph 2 -nr 1 -vv**
-![estrazioneInfoHotel](https://user-images.githubusercontent.com/51764993/76440765-a4eaaa80-63be-11ea-8a33-f97a74a7fbfd.png)
+![estrazioneInfohotelRec](https://user-images.githubusercontent.com/51764993/80222437-1d43bd00-8647-11ea-86ac-a9fbe40b9f50.png)
 ---
 ## Procedimento di estrazione dei prezzi per gli hotel di una determinata città
 - Importare la struttura del database utilizzando il file `DBstruttura.sql`, creando così il DB (verificare che non sia presente un omonimo DB).
