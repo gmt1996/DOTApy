@@ -5,13 +5,14 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException as WDE
+from selenium.common.exceptions import NoSuchElementException as NSE
 import mysql.connector
 from mysql.connector import Error
 import re
 import sys
 import argparse
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
+#options.add_argument('headless')
 options.add_argument('--lang=it')
 #windows
 driver = webdriver.Chrome( options = options)
@@ -413,6 +414,8 @@ try:
             time.sleep(6)
         except WDE:
             debug("errore estrazione delle informazioni, info non estratte", 0)
+except NSE:
+	exit("finito estrazione info hotel e recensioni senza errori")
 except WDE:
     entraHotel()
     pagSuccessiva()
