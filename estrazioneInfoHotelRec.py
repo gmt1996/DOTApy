@@ -18,22 +18,24 @@ driver = webdriver.Chrome( options = options)
 #linux inserire path chromedriver
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 parser = argparse.ArgumentParser()
-parser.add_argument("-c", type=str,required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
-parser.add_argument('--verbose', '-v', action='count', default=0 , help="si utilizza per determinare il livello delle stampe in output aggiungendo uno o due v come parametro. -v primo livello che stampa errori e milestones, -vv stampa i precedenti più altri messaggi di debug, di default stampa solo errori")
-parser.add_argument('-nr', type= int, default=1000, help='numero di pagine per hotel di recensioni da estrarre, se non specificato estrarrà tutte le recensioni')
-parser.add_argument('-ph', type=int, help='numero di pagine di hotel da estrarre')
+parser.add_argument("-c", type=str,required= True, help="Inserire la città per la quale estrarre i dati. Es: pisa")
+parser.add_argument('--verbose', '-v', action='count', default=0 , help="Argomento utilizzato per determinare la quantità delle stampe in output, inserendo una o due v come parametro. Es: -v per primo livello che porterà in stampa errori e messaggi importanti , -vv per il secondo livello che porterà in stampa errori e messaggi importanti più altri messaggi di debug, di default saranno riportati in output i soli messaggi di errore")
+parser.add_argument('-nr', type= int, default=1000, help='Inserire il numero di pagine per hotel di recensioni da estrarre, se non specificato estrarrà tutte le recensioni')
+parser.add_argument('-ph', type=int, help='Inserire il numero di pagine di hotel da estrarre, se non specificato verranno estratte informazioni da tutte le pagini presenti')
 args = parser.parse_args()
 
 if args.ph:
 	pagineHotelSelezionate = args.ph
+#definizione di verbose
 verbose = 0
 if args.verbose:
 	verbose = args.verbose
+#funzione per la stampa dei messaggi
 def debug(stringa, livello):
 	if livello <= verbose:
 		print(stringa)
 config = configparser.ConfigParser()
-#verifica sul config.ini
+#verifica dei parametri del file config.ini
 configurazione = config.read('config.ini')
 if not configurazione:
     exit('file config.ini non trovato')
@@ -45,7 +47,7 @@ else:
 if not hostDB or not userDB  or not dbDB:
     exit('parametri file config.ini non definiti')
 
-#apre la pagina web all'indirizzo specificato
+#Il driver apre la pagina web all'indirizzo specificato
 driver.get('https://www.booking.com/')
 
 NomeHote = 'a'
@@ -55,7 +57,7 @@ connection = mysql.connector.connect(host = hostDB,
        user = userDB,
        passwd = passwdDB,
        db = dbDB)
-
+#funzione per l'estrazione delle recensioni che si basa sull'argomento -nr per estrarne il numero selezionato
 def recen():
     time.sleep(3)
     allRec = driver.find_element_by_xpath('//*[@id="show_reviews_tab"]')
@@ -72,7 +74,7 @@ def recen():
         listaRec = driver.find_element_by_class_name('review_list')
         numRec = listaRec.find_elements_by_class_name('review_list_new_item_block')
         debug(len(numRec),2)
-
+		#estrazione del nome, nazione e testo delle recensioni scritte dagli utenti
         for i in range(0,len(numRec)):
             name = numRec[i].find_element_by_class_name('bui-avatar-block__title').text
             title = numRec[i].find_element_by_class_name('c-review-block__title').text
@@ -160,7 +162,7 @@ def recen():
             break
     debug('fine recensioni',1)
 
-#funzione che apre la pagina di ogni singolo hotel dove verranno poi estratte le informazioni
+#funzione per aprire le pagine dei singoli hotel da dove verranno poi estratte le informazioni
 def entraHotel():
     numHt = driver.find_elements_by_class_name('sr_item')
     for i in range(0,len(numHt)):
@@ -184,18 +186,18 @@ def seleziona5km():
     km.click()
     time.sleep(2)
 
-#funzione che estrae informazioni dagli hotel
+#funzione per l'estrazione delle informazioni dagli hotel
 def estrazioneInfoHotel():
     for i in driver.window_handles:
         driver.switch_to.window(i)
         time.sleep(2)
-        #estrae nome hotel
+        #estrazione nome hotel
     try:
         nomeHt = driver.find_element_by_class_name('hp__hotel-name')
     except WDE:
         debug("errore estrazione nome hotel", 0)
 
-    #estrae indirizzo
+    #estrazione indirizzo
     indirizz = driver.find_element_by_class_name('hp_address_subtitle').text
     indiri = (indirizz, )
     try:
@@ -208,7 +210,7 @@ def estrazioneInfoHotel():
         hturl = (x,)
     except WDE:
         debug("errore estrazione url", 0)
-    #estrae latitudine e longitudine dal file javaScript
+    #estrazione della latitudine e della longitudine dal file javaScript
     javaScript = "return(booking.env.b_map_center_latitude)"
     js = driver.execute_script(javaScript)
     javaScript1 = "return(booking.env.b_map_center_longitude)"
@@ -233,7 +235,7 @@ def estrazioneInfoHotel():
 	    except mysql.connector.Error as error:
 	        debug("Failed to insert record into accomodation table {}".format(error),1)
 
-	    #estrae tutte le cose che piacciono di più ai vistatori
+	    #estrazione di tutti i servizi preferiti dai vistatori
 	    try:
 	        pazziper = driver.find_elements_by_class_name('important_facility')
 	        pazzi = ' '
@@ -260,7 +262,7 @@ def estrazioneInfoHotel():
 	    except WDE:
 	        debug("errore estrazione sezione pazzi per", 0)
 
-	    #estrae i buoni motivi per scegliere la struttura
+	    #estrazione dei buoni motivi per scegliere la struttura
 	    try:
 	        motivi3 = driver.find_elements_by_class_name('oneusp')
 	        mot = ''
@@ -288,7 +290,7 @@ def estrazioneInfoHotel():
 	    except WDE:
 	        debug("errore estrazione sezione pazzi per", 0)
 
-	    #estrae tutte le categorie e per ognuna le sue info
+	    #estrazione di tutte le categorie e per ognuna di esse le sue info
 	    try:
 	        checklistSection = driver.find_elements_by_class_name('facilitiesChecklistSection')
 	        ele = ''
@@ -364,9 +366,8 @@ def normalizzaData(x):
     data = '-'.join(ArrayAppoggio)
     return (data)
 
-
+#funzione che se presenti accetta i coockie
 def accettaCookie ():
-    #se presenti si accettano i coockie
     try:
         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
         coo.click()
@@ -406,9 +407,9 @@ def main():
                 debug("errore estrazione delle informazioni, info non estratte", 0)
     except NSE:
         entraHotel()
-        exit("finito estrazione info hotel e recensioni senza errori")
+        exit("fine estrazione info hotel e recensioni")
     except WDE:
-        debug("finito estrazione info hotel e recensioni", 0)
+        debug("fine estrazione info hotel e recensioni", 0)
     if(connection.is_connected()):
         cursor.close()
         connection.close()
