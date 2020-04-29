@@ -1,5 +1,7 @@
 #estrazione nome e prezzo per tutti gli hotel
-
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 import configparser
 import time
 from selenium import webdriver
@@ -12,6 +14,11 @@ from mysql.connector import Error
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 import datetime
 import re
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--verbose', '-v', action='count', default=0 , help="Argomento utilizzato per determinare la quantità delle stampe in output, inserendo una o due v come parametro. Es: -v per primo livello che porterà in stampa errori e messaggi importanti , -vv per il secondo livello che porterà in stampa errori e messaggi importanti più altri messaggi di debug, di default saranno riportati in output i soli messaggi di errore")
+args = parser.parse_args()
 
 config = configparser.ConfigParser()
 configurazione = config.read('config.ini')
@@ -33,7 +40,17 @@ prox.ssl_proxy = "ip_addr:port"
 
 options = webdriver.ChromeOptions()
 options.add_argument('headless')
+options.add_argument('--log-level=3')
 driver = webdriver.Chrome(options = options)
+
+#definizione di verbose
+verbose = 0
+if args.verbose:
+	verbose = args.verbose
+#funzione per la stampa dei messaggi
+def debug(stringa, livello):
+	if livello <= verbose:
+		print(stringa)
 
 giorno = (datetime.date.today(), )
 
@@ -50,18 +67,20 @@ mycursor.close()
 beta = 1
 try:
  for i in myresult:
-    print(beta)
+    debug(beta,2)
     driver.get(i[0])
     d = (i[1],)
     kk = (i[2],)
     try:
         #trova hotel e prezzi
         def trovaHtPr():
+            attesa = WebDriverWait(driver, 5)
+            attesa.until(EC.presence_of_element_located((By.XPATH, '//*[@id="hotellist_inner"]')))
             ht = driver.find_element_by_xpath('//*[@id="hotellist_inner"]')
             numHt = ht.find_elements_by_class_name('sr_item')
-            print(len(numHt))
+            debug(len(numHt),2)
             #aggiunte delle attese con time.sleep per permettere al programma e al motore di ricerca di eseguire i calcoli in maniera corretta
-            time.sleep(3)
+            #time.sleep(3)
             for i in range(0, len(numHt)):
                 o = numHt[i].find_element_by_class_name('sr-hotel__name').text
                 s = (o,)
@@ -90,7 +109,7 @@ try:
                         cursor.close()
 
                     except mysql.connector.Error as error:
-                        print("Failed to insert record into urlht table {}".format(error))
+                        debug("Failed to insert record into urlht table {}".format(error),1)
                     finally:
                         if (mydb.is_connected()):
                             cursor.close()
@@ -100,19 +119,21 @@ try:
                 coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
                 coo.click()
             except WDE:
-                print("No coockie")
+                debug("No coockie",2)
             try:
                 coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
                 coo1.click()
             except WDE:
-                print("No coockie")
+                debug("No coockie",2)
             try:
+                attesa = WebDriverWait(driver, 5)
+                attesa.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="filter_distance"]/div[2]/a[3]/label/div')))
                 km = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[3]/label/div')
-                time.sleep(2)
+                #time.sleep(2)
                 km.click()
                 time.sleep(1)
             except WDE:
-                 print("no 5km")
+                 debug("no 5km",2)
         time.sleep(2)
         seleziona5km()
         time.sleep(2)
@@ -124,21 +145,21 @@ try:
                         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
                         coo.click()
                     except WDE:
-                        print("No coockie")
+                        debug("No coockie",2)
                     try:
                         coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
                         coo1.click()
                     except WDE:
-                        print("No coockie")
+                        debug("No coockie",2)
                     driver.find_element_by_xpath('//*[@id="search_results_table"]/div[4]/nav/ul/li[3]/a').click()
                     time.sleep(4)
                 except WDE:
-                    print("probabile errore di rete, riprovare")
+                    debug("probabile errore di rete, riprovare",0)
         except WDE:
            trovaHtPr()
         beta = beta + 1
     except WDE:
-        print('data scaduta')
+        debug('data scaduta',0)
 except WDE:
-    print("probabile errore di rete")
+    debug("probabile errore di rete",0)
 mydb.close()

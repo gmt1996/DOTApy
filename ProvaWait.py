@@ -1,3 +1,6 @@
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 import configparser
 import time
 from selenium import webdriver
@@ -7,8 +10,8 @@ from selenium.common.exceptions import NoSuchElementException as NSE
 import mysql.connector
 from mysql.connector import Error
 import re
+import sys
 import argparse
-
 options = webdriver.ChromeOptions()
 options.add_argument('headless')
 options.add_argument('--lang=it')
@@ -59,11 +62,15 @@ connection = mysql.connector.connect(host = hostDB,
        db = dbDB)
 #funzione per l'estrazione delle recensioni che si basa sull'argomento -nr per estrarne il numero selezionato
 def recen():
-    time.sleep(3)
+    #time.sleep(3)
+    attesa = WebDriverWait(driver, 5)
+    attesa.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="show_reviews_tab"]')))
     allRec = driver.find_element_by_xpath('//*[@id="show_reviews_tab"]')
     allRec.click()
+    attesa.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="review_sort"]')))
     cust = driver.find_element_by_xpath('//*[@id="review_sort"]')
     cust.click()
+    attesa.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="review_sort"]/option[2]')))
     recenti = driver.find_element_by_xpath('//*[@id="review_sort"]/option[2]')
     recenti.click()
     time.sleep(2)
@@ -155,6 +162,7 @@ def recen():
                 debug("Failed to insert record into accomodationrecensioni table {}".format(error),1)
         numeroRecensioni = numeroRecensioni - 1
         try:
+            attesa.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')))
             next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')
             next.click()
             time.sleep(2)
@@ -382,7 +390,7 @@ def pagSuccessiva():
     accettaCookie()
     #selettore freccia avanti pag
     pag = driver.find_element_by_css_selector('#search_results_table > div.bui-pagination.results-paging > nav > ul > li.bui-pagination__item.bui-pagination__next-arrow > a')
-    time.sleep(3)
+    #time.sleep(3)
     pag.click()
     main_page = driver.current_window_handle
 

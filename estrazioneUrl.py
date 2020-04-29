@@ -15,6 +15,7 @@ import argparse
 from utility import *
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--verbose', '-v', action='count', default=0 , help="Argomento utilizzato per determinare la quantità delle stampe in output, inserendo una o due v come parametro. Es: -v per primo livello che porterà in stampa errori e messaggi importanti , -vv per il secondo livello che porterà in stampa errori e messaggi importanti più altri messaggi di debug, di default saranno riportati in output i soli messaggi di errore")
 parser.add_argument("-c", type=str, required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
 parser.add_argument("-d", type=str, required= True, help='seleziona il mese di inizio con il formato mese anno es: "maggio 2020"')
 parser.add_argument("-m", type=int, required= True, help="seleziona per quanti mesi effettuare l'estrazione es: 6")
@@ -32,12 +33,20 @@ else:
     dbDB = config['mysqlDB']['db']
 if not hostDB or not userDB or not passwdDB or not dbDB:
     exit('parametri file config.ini non definiti')
+#definizione di verbose
+verbose = 0
+if args.verbose:
+	verbose = args.verbose
+#funzione per la stampa dei messaggi
+def debug(stringa, livello):
+	if livello <= verbose:
+		print(stringa)
 try:
     connection = mysql.connector.connect(host = hostDB,
            user = userDB,
            passwd = passwdDB,
            db = dbDB)
-    print('stabilita connessione al DB')
+    debug('stabilita connessione al DB',0)
 except:
     exit('impossibile stabilire connessione al DB')
 options = webdriver.ChromeOptions()
@@ -56,12 +65,12 @@ def data(inpu,inpu1):
         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
         coo.click()
     except WDE:
-        print("No coockie")
+        debug("No coockie",2)
     try:
         coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
         coo1.click()
     except WDE:
-        print("No coockie")
+        debug("No coockie",2)
 
     avanti = driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[2]')
 
@@ -77,12 +86,12 @@ def data(inpu,inpu1):
                 coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
                 coo.click()
             except WDE:
-                print("No coockie")
+                debug("No coockie",2)
             try:
                 coo1 = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
                 coo1.click()
             except WDE:
-                print("No coockie")
+                debug("No coockie",2)
             passo3 = driver.find_element_by_class_name('xp__dates-inner')
             driver.find_element_by_xpath('//*[@id="frm"]/div[1]/div[2]/div[2]/div/div/div[2]')
             passo3.click()
@@ -139,11 +148,11 @@ def data(inpu,inpu1):
                     cursor = connection.cursor()
                     result = cursor.execute(mySql_insert_query, (urlCorrenteHotel[0], dataPernottamento[0], cittaEstrazione))
                     connection.commit()
-                    print("Record inserted successfully into urlht table")
+                    debug("Record inserted successfully into urlht table",1)
                     cursor.close()
 
                 except mysql.connector.Error as error:
-                    print("Failed to insert record into urlht table {}".format(error))
+                    debug("Failed to insert record into urlht table {}".format(error),1)
                 time.sleep(3)
 
                 #torna alla pagina precedente
@@ -158,9 +167,9 @@ def data(inpu,inpu1):
 
                 driver.implicitly_wait(5)
             if(int(driver.find_elements_by_class_name('bui-calendar__date')[i].text) == calendario[1]):
-                print('fine mese')
+                debug('fine mese',2)
                 passo3.click()
-                print(splitt)
+                debug(splitt,2)
                 if (splitt == 12):
                     splitt = 1
                     ann = ann + 1
@@ -173,7 +182,7 @@ def data(inpu,inpu1):
 
 
 calendario = calendar.monthrange(normalizzaAnno(args.d),normalizzaMesi(args.d))
-print(calendario)
+debug(calendario,2)
 meseRiferimento = args.d
 splitt = int(normalizzaMesi(meseRiferimento))
 splittato = meseRiferimento.split()
