@@ -217,7 +217,7 @@ def estrazioneInfoHotel():
     js1 = driver.execute_script(javaScript1)
     global NomeHote
     cursor = connection.cursor()
-    cursor.execute("select NomeHotel, indirizzo from `o.t.a.3`.accomodation")
+    cursor.execute("select NomeHotel, indirizzo from accomodation")
     hotelEstratti = cursor.fetchall()
     if ((NomeHote[0], indiri[0]) not in hotelEstratti):
 	    try:
