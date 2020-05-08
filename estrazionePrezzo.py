@@ -72,7 +72,7 @@ try:
     d = (i[1],)
     kk = (i[2],)
     try:
-        #trova hotel e prezzi
+        #estrazione nome hotel e prezzo
         def trovaHtPr():
             attesa = WebDriverWait(driver, 5)
             attesa.until(EC.presence_of_element_located((By.XPATH, '//*[@id="hotellist_inner"]')))
