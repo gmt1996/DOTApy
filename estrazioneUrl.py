@@ -15,7 +15,7 @@ import argparse
 from utility import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--verbose', '-v', action='count', default=0 , help="Argomento utilizzato per determinare la quantità delle stampe in output, inserendo una o due v come parametro. Es: -v per primo livello che porterà in stampa errori e messaggi importanti , -vv per il secondo livello che porterà in stampa errori e messaggi importanti più altri messaggi di debug, di default saranno riportati in output i soli messaggi di errore")
+parser.add_argument('--verbose', '-v', action='count', default=0 , help="Argomento utilizzato per determinare la quantità delle stampe in output, inserendo una o due v come parametro. Es: -v per primo livello che porterà in stampa errori e messaggi importanti , -vv per il secondo livello che porterà in stampa errori, messaggi importanti più altri messaggi di debug, di default saranno riportati in output i soli messaggi di errore")
 parser.add_argument("-c", type=str, required= True, help="seleziona la città per la quale estrarre i dati es: pisa")
 parser.add_argument("-d", type=str, required= True, help='seleziona il mese di inizio con il formato mese anno es: "maggio 2020"')
 parser.add_argument("-m", type=int, required= True, help="seleziona per quanti mesi effettuare l'estrazione es: 6")
