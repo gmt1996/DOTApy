@@ -13,9 +13,9 @@ options = webdriver.ChromeOptions()
 options.add_argument('headless')
 options.add_argument('--lang=it')
 options.add_argument('--log-level=3')
-#windows
+
 driver = webdriver.Chrome( options = options)
-#linux inserire path chromedriver
+
 #driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", type=str,required= True, help="Inserire la città per la quale estrarre i dati. Es: pisa")
