@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `o.t.a.` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `o.t.a.`;
+CREATE DATABASE  IF NOT EXISTS `o.t.a.5` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `o.t.a.5`;
 -- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: o.t.a.2
+-- Host: 127.0.0.1    Database: o.t.a.5
 -- ------------------------------------------------------
 -- Server version	8.0.18
 
@@ -31,8 +31,10 @@ CREATE TABLE `accomodation` (
   `url` varchar(256) DEFAULT NULL,
   `latitudine` varchar(56) DEFAULT NULL,
   `longitudine` varchar(56) DEFAULT NULL,
+  `tipologia` varchar(45) DEFAULT NULL,
+  `stelle` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`IDhotel`)
-) ENGINE=InnoDB AUTO_INCREMENT=855 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=469 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +125,7 @@ CREATE TABLE `servizi` (
   `servizio` varchar(128) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `value_UNIQUE` (`servizio`)
-) ENGINE=InnoDB AUTO_INCREMENT=34501 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=62514 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,15 +141,15 @@ CREATE TABLE `urlhotel` (
   `data` date DEFAULT NULL,
   `citta` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=392 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=400 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping events for database 'o.t.a.2'
+-- Dumping events for database 'o.t.a.5'
 --
 
 --
--- Dumping routines for database 'o.t.a.2'
+-- Dumping routines for database 'o.t.a.5'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -159,4 +161,4 @@ CREATE TABLE `urlhotel` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-20 16:30:58
+-- Dump completed on 2020-05-14 18:13:08
