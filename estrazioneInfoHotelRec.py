@@ -196,7 +196,22 @@ def estrazioneInfoHotel():
         nomeHt = driver.find_element_by_class_name('hp__hotel-name')
     except WDE:
         debug("errore estrazione nome hotel", 0)
-
+    #estrazionetipologia
+    try:
+        #tipologia = driver.find_element_by_class_name('hp__hotel-type-badge').text
+        tipologia  =driver.find_element_by_xpath('//*[@id="hp_hotel_name"]/span').text
+        typ = (tipologia,)
+    except WDE:
+        typ = []
+        debug("errore estrazione tipologia", 2)
+    #estrazione stelle
+    try:
+        stelle = driver.find_element_by_xpath('//*[@id="wrap-hotelpage-top"]/div[1]/span/span/i/span').text
+        ns = re.findall(r'\d', stelle)
+        NumeroStelle = ns[0]
+    except :
+        NumeroStelle = ['']
+        debug("nessuna stella", 2)
     #estrazione indirizzo
     indirizz = driver.find_element_by_class_name('hp_address_subtitle').text
     indiri = (indirizz, )
@@ -222,12 +237,12 @@ def estrazioneInfoHotel():
     if ((NomeHote[0], indiri[0]) not in hotelEstratti):
 	    try:
 
-	        mySql_insert_query = """INSERT INTO accomodation (NomeHotel, indirizzo, url, latitudine, longitudine)
+	        mySql_insert_query = """INSERT INTO accomodation (NomeHotel, indirizzo, url, latitudine, longitudine,tipologia,stelle)
 	               VALUES
-	               (%s, %s, %s, %s, %s) """
+	               (%s, %s, %s, %s, %s, %s, %s) """
 
 	        cursor = connection.cursor()
-	        result = cursor.execute(mySql_insert_query, (NomeHote[0], indiri[0], hturl[0], js, js1))
+	        result = cursor.execute(mySql_insert_query, (NomeHote[0], indiri[0], hturl[0], js, js1, typ[0], NumeroStelle[0]))
 	        connection.commit()
 	        debug("Record inserted successfully into accomodation table",1)
 	        cursor.close()
