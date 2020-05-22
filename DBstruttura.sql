@@ -1,5 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `o.t.a.5` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `o.t.a.5`;
+CREATE DATABASE  IF NOT EXISTS `o.t.a.py` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `o.t.a.py`;
 -- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: o.t.a.5

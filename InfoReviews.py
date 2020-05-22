@@ -1,3 +1,22 @@
+
+"""Copyright 2020 Matteo Giannettoni
+
+This file is part of Nome-Programma.
+
+Nome-Programma is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Nome-Programma is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Nome-Programma.  If not, see <http://www.gnu.org/licenses/>."""
+
+
 import configparser
 import time
 from selenium import webdriver
@@ -10,13 +29,13 @@ import re
 import argparse
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
+#options.add_argument('headless')
 options.add_argument('--lang=it')
 options.add_argument('--log-level=3')
 
 driver = webdriver.Chrome( options = options)
 
-#driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
+#driver = webdriver.Chrome(executable_path='/Users/rizla/Documents/chromedriver_win32/chromedriver.exe', options = options)
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", type=str,required= True, help="Inserire la città per la quale estrarre i dati. Es: pisa")
 parser.add_argument('--verbose', '-v', action='count', default=0 , help="Argomento utilizzato per determinare la quantità delle stampe in output, inserendo una o due v come parametro. Es: -v per primo livello che porterà in stampa errori e messaggi importanti , -vv per il secondo livello che porterà in stampa errori e messaggi importanti più altri messaggi di debug, di default saranno riportati in output i soli messaggi di errore")
@@ -57,6 +76,7 @@ connection = mysql.connector.connect(host = hostDB,
        user = userDB,
        passwd = passwdDB,
        db = dbDB)
+
 #funzione per l'estrazione delle recensioni che si basa sull'argomento -nr per estrarne il numero selezionato
 def recen():
     time.sleep(3)
@@ -138,6 +158,7 @@ def recen():
 
             time.sleep(2)
             try:
+                prin('ciao')
                 cursor = connection.cursor()
                 cursor.execute("SELECT max(IDHotel) from accomodation")
                 risultato = cursor.fetchone()
@@ -167,8 +188,8 @@ def entraHotel():
     numHt = driver.find_elements_by_class_name('sr_item')
     for i in range(0,len(numHt)):
         s = numHt[i].find_element_by_class_name('sr-hotel__name')
-
         pi = numHt[i].find_element_by_class_name('sr-hotel__name').text
+        print('ht')
         global NomeHote
         NomeHote = (pi,)
         s.click()
@@ -182,6 +203,7 @@ def seleziona5km():
     #imposta la distanza a un km
     #km1 = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[1]/label/div')
     km = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[3]/label/div')
+    print('km')
     time.sleep(2)
     km.click()
     time.sleep(2)
@@ -202,11 +224,12 @@ def estrazioneInfoHotel():
         tipologia  =driver.find_element_by_xpath('//*[@id="hp_hotel_name"]/span').text
         typ = (tipologia,)
     except WDE:
-        typ = []
+        typ = ['']
         debug("errore estrazione tipologia", 2)
     #estrazione stelle
     try:
-        stelle = driver.find_element_by_xpath('//*[@id="wrap-hotelpage-top"]/div[1]/span/span/i/span').text
+        stelle = driver.find_element_by_class_name('hp__hotel_ratings').text
+        #stelle = driver.find_element_by_xpath('//*[@id="wrap-hotelpage-top"]/div[1]/span/span[1]/i/span').text
         ns = re.findall(r'\d', stelle)
         NumeroStelle = ns[0]
     except :
@@ -223,8 +246,10 @@ def estrazioneInfoHotel():
         l=re.findall(r'(h.*)\?', driver.current_url)
         x= l[0]
         hturl = (x,)
-    except WDE:
+    except :
+        hturl=[driver.current_url]
         debug("errore estrazione url", 0)
+    print('in')
     #estrazione della latitudine e della longitudine dal file javaScript
     javaScript = "return(booking.env.b_map_center_latitude)"
     js = driver.execute_script(javaScript)
@@ -235,131 +260,125 @@ def estrazioneInfoHotel():
     cursor.execute("select NomeHotel, indirizzo from accomodation")
     hotelEstratti = cursor.fetchall()
     if ((NomeHote[0], indiri[0]) not in hotelEstratti):
-	    try:
-
-	        mySql_insert_query = """INSERT INTO accomodation (NomeHotel, indirizzo, url, latitudine, longitudine,tipologia,stelle)
+        try:
+            mySql_insert_query = """INSERT INTO accomodation (NomeHotel, indirizzo, url, latitudine, longitudine,tipologia,stelle)
 	               VALUES
 	               (%s, %s, %s, %s, %s, %s, %s) """
-
-	        cursor = connection.cursor()
-	        result = cursor.execute(mySql_insert_query, (NomeHote[0], indiri[0], hturl[0], js, js1, typ[0], NumeroStelle[0]))
-	        connection.commit()
-	        debug("Record inserted successfully into accomodation table",1)
-	        cursor.close()
-
-	    except mysql.connector.Error as error:
-	        debug("Failed to insert record into accomodation table {}".format(error),1)
-
-	    #estrazione di tutti i servizi preferiti dai vistatori
-	    try:
-	        pazziper = driver.find_elements_by_class_name('important_facility')
-	        pazzi = ' '
-	        for i in range(0,len(pazziper)//2):
-	            gsd = pazziper[i].text
-	            try:
-	                cursor = connection.cursor()
-	                cursor.execute("SELECT max(IDHotel) from accomodation")
-	                risultato = cursor.fetchone()
-	                cursor.close()
-
-	                mySql_insert_query = """INSERT INTO accomodationpazziper (idhotel, pazziper)
+            cursor = connection.cursor()
+            result = cursor.execute(mySql_insert_query, (NomeHote[0], indiri[0], hturl[0], js, js1, typ[0], NumeroStelle[0]))
+            connection.commit()
+            debug("Record inserted successfully into accomodation table",1)
+            cursor.close()
+        except mysql.connector.Error as error:
+            debug("Failed to insert record into accomodation table {}".format(error),1)
+        #estrazione di tutti i servizi preferiti dai vistatori
+        try:
+            pazziper = driver.find_elements_by_class_name('important_facility')
+            pazzi = ''
+            for i in range(0,len(pazziper)//2):
+                gsd = pazziper[i].text
+            try:
+                cursor = connection.cursor()
+                cursor.execute("SELECT max(IDHotel) from accomodation")
+                risultato = cursor.fetchone()
+                cursor.close()
+                mySql_insert_query = """INSERT INTO accomodationpazziper (idhotel, pazziper)
 	                       VALUES
 	                       (%s, %s) """
-	                cursor = connection.cursor()
-	                result = cursor.execute(mySql_insert_query, (risultato[0],gsd))
-	                connection.commit()
-	                debug("Record inserted successfully into accomodationpazziper table",2)
-	                cursor.close()
+                cursor = connection.cursor()
+                result = cursor.execute(mySql_insert_query, (risultato[0],gsd))
+                connection.commit()
+                debug("Record inserted successfully into accomodationpazziper table",2)
+                cursor.close()
 
-	            except mysql.connector.Error as error:
-	                debug("Failed to insert record into accomodationpazziper table {}".format(error),1)
-	            pazzi = pazzi + pazziper[i].text + ', '
-	    except WDE:
-	        debug("errore estrazione sezione pazzi per", 0)
+            except mysql.connector.Error as error:
+                debug("Failed to insert record into accomodationpazziper table {}".format(error),1)
+                pazzi = pazzi + pazziper[i].text + ', '
+        except WDE:
+            debug("errore estrazione sezione pazzi per", 0)
 
-	    #estrazione dei buoni motivi per scegliere la struttura
-	    try:
-	        motivi3 = driver.find_elements_by_class_name('oneusp')
-	        mot = ''
-	        for i in range(0,len(motivi3)):
-	            fd = motivi3[i].text
-	            try:
-	                cursor = connection.cursor()
-	                cursor.execute("SELECT max(IDHotel) from accomodation")
-	                risultato = cursor.fetchone()
-	                cursor.close()
+        #estrazione dei buoni motivi per scegliere la struttura
+        try:
+            motivi3 = driver.find_elements_by_class_name('oneusp')
+            mot = ''
+            for i in range(0,len(motivi3)):
+                fd = motivi3[i].text
+                try:
+                    cursor = connection.cursor()
+                    cursor.execute("SELECT max(IDHotel) from accomodation")
+                    risultato = cursor.fetchone()
+                    cursor.close()
 
-	                mySql_insert_query = """INSERT INTO accomodationmotivi (idhotel, motivo)
-	                       VALUES
+                    mySql_insert_query = """INSERT INTO accomodationmotivi (idhotel, motivo)
+                            VALUES
 	                       (%s, %s) """
-	                cursor = connection.cursor()
-	                result = cursor.execute(mySql_insert_query, (risultato[0],fd))
-	                connection.commit()
-	                debug("Record inserted successfully into accomodationmotivi table",1)
-	                cursor.close()
+                    cursor = connection.cursor()
+                    result = cursor.execute(mySql_insert_query, (risultato[0],fd))
+                    connection.commit()
+                    debug("Record inserted successfully into accomodationmotivi table",1)
+                    cursor.close()
 
+                except mysql.connector.Error as error:
+                    debug("Failed to insert record into accomodationmotivi table {}".format(error),1)
+                mot = mot + motivi3[i].text + '; '
+        except WDE:
+            debug("errore estrazione sezione pazzi per", 0)
 
-	            except mysql.connector.Error as error:
-	                debug("Failed to insert record into accomodationmotivi table {}".format(error),1)
-	            mot = mot + motivi3[i].text + '; '
-	    except WDE:
-	        debug("errore estrazione sezione pazzi per", 0)
+        #estrazione di tutte le categorie e per ognuna di esse le sue info
+        try:
+            checklistSection = driver.find_elements_by_class_name('facilitiesChecklistSection')
+            ele = ''
 
-	    #estrazione di tutte le categorie e per ognuna di esse le sue info
-	    try:
-	        checklistSection = driver.find_elements_by_class_name('facilitiesChecklistSection')
-	        ele = ''
+            for i in range(0,len(checklistSection)):
+                h5 = checklistSection[i].find_element_by_tag_name('h5')
+                debug(h5.text,2)
 
-	        for i in range(0,len(checklistSection)):
-	            h5 = checklistSection[i].find_element_by_tag_name('h5')
-	            debug(h5.text,2)
-
-	            for j in range(0,len(checklistSection[i].find_elements_by_tag_name('li'))):
-	                elementi = checklistSection[i].find_elements_by_tag_name('li')[j].text
-	                e = (elementi, )
-	                try:
-	                    mySql_insert_query = """INSERT INTO servizi (servizio)
+                for j in range(0,len(checklistSection[i].find_elements_by_tag_name('li'))):
+                    elementi = checklistSection[i].find_elements_by_tag_name('li')[j].text
+                    e = (elementi, )
+                    try:
+                        mySql_insert_query = """INSERT INTO servizi (servizio)
 	                           VALUES
 	                           (%s) """
 
-	                    cursor = connection.cursor()
-	                    result = cursor.execute(mySql_insert_query, e)
-	                    connection.commit()
-	                    debug("Record inserted successfully into servizi table",1)
-	                    cursor.close()
-	                except mysql.connector.Error as error:
-	                    debug("Failed to insert record into servizi table {}".format(error),1)
-	                try:
-	                    cursor = connection.cursor()
-	                    cursor.execute("SELECT max(IDHotel) from accomodation")
-	                    risultato = cursor.fetchone()
-	                    cursor.close()
-	                    cursor = connection.cursor()
-	                    cursor.execute("SELECT id from servizi WHERE servizio = %s" , e)
-	                    risultato1 = cursor.fetchone()
-	                    cursor.close()
-	                    mySql_insert_query = """INSERT INTO accomodationservice (IDHotel, IDServizi)
+                        cursor = connection.cursor()
+                        result = cursor.execute(mySql_insert_query, e)
+                        connection.commit()
+                        debug("Record inserted successfully into servizi table",1)
+                        cursor.close()
+                    except mysql.connector.Error as error:
+                        debug("Failed to insert record into servizi table {}".format(error),1)
+                    try:
+                        cursor = connection.cursor()
+                        cursor.execute("SELECT max(IDHotel) from accomodation")
+                        risultato = cursor.fetchone()
+                        cursor.close()
+                        cursor = connection.cursor()
+                        cursor.execute("SELECT id from servizi WHERE servizio = %s" , e)
+                        risultato1 = cursor.fetchone()
+                        cursor.close()
+                        mySql_insert_query = """INSERT INTO accomodationservice (IDHotel, IDServizi)
 	                           VALUES
 	                           (%s, %s) """
-	                    cursor = connection.cursor()
-	                    result = cursor.execute(mySql_insert_query, (risultato[0], risultato1[0]))
-	                    connection.commit()
-	                    debug("Record inserted successfully into accomodationservice table",1)
-	                    cursor.close()
+                        cursor = connection.cursor()
+                        result = cursor.execute(mySql_insert_query, (risultato[0], risultato1[0]))
+                        connection.commit()
+                        debug("Record inserted successfully into accomodationservice table",1)
+                        cursor.close()
 
 
-	                except mysql.connector.Error as error:
-	                    debug("Failed to insert record into accomodationservice table {}".format(error),1)
-	                ele = ele + elementi +'; '
-	                debug(elementi,2)
-	            debug("Fine estrazione informazioni, inizio estrazione recensioni",1)
-	    except WDE:
-	        debug("err recensioni",0)
-	    try:
-             if args.nr > 0:
-                 recen()
-	    except WDE:
-	        debug("errore recensioni",0)
+                    except mysql.connector.Error as error:
+                        debug("Failed to insert record into accomodationservice table {}".format(error),1)
+                    ele = ele + elementi +'; '
+                    debug(elementi,2)
+                debug("Fine estrazione informazioni, inizio estrazione recensioni",1)
+        except WDE:
+            debug("err recensioni",0)
+        try:
+            if args.nr > 0:
+                recen()
+        except WDE:
+            debug("errore recensioni",0)
     else:
         debug("Info hotel già estratte, inizio estrazione prossimo hotel", 1)
     driver.close()

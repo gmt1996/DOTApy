@@ -1,4 +1,22 @@
-#estrazione delle url conteneti le pagine di booking per tutto il periodo di date scelto
+
+"""Copyright 2020 Matteo Giannettoni
+
+This file is part of Nome-Programma.
+
+Nome-Programma is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Nome-Programma is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Nome-Programma.  If not, see <http://www.gnu.org/licenses/>."""
+
+
 import configparser
 import mysql.connector
 from mysql.connector import Error
@@ -53,8 +71,8 @@ options = webdriver.ChromeOptions()
 #options.add_argument('headless')
 #windows
 driver = webdriver.Chrome( options = options)
-#linux inserire path chromedriver
-#driver = webdriver.Chrome(executable_path='/mnt/c/Windows/chromedriver.exe', options = options)
+
+#driver = webdriver.Chrome(executable_path='/Users/rizla/Documents/chromedriver_win32/chromedriver.exe', options = options)
 
 #apre la pagina web all'indirizzo specificato
 driver.get('https://www.booking.com/')
