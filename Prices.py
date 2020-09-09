@@ -134,6 +134,11 @@ try:
 
         def seleziona5km():
             try:
+                mainCoo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
+                mainCoo.click()
+            except  WDE:
+                debug("NO main Cookies",2)
+            try:
                 coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
                 coo.click()
             except WDE:
