@@ -80,6 +80,11 @@ driver.get('https://www.booking.com/')
 def data(inpu,inpu1):
     #Accetta i coockie se presenti
     try:
+        mainCoo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
+        mainCoo.click()
+    except  WDE:
+        debug("NO main Cookies",2)
+    try:
         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
         coo.click()
     except WDE:
@@ -100,6 +105,11 @@ def data(inpu,inpu1):
     global ann
     #ciclo su tutti i giorni disponibili per il mese considerato
     for i in range(calendario[0],calendario[1]+calendario[0]):
+            try:
+                mainCoo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
+                mainCoo.click()
+            except  WDE:
+                debug("NO main Cookies",2)
             try:
                 coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
                 coo.click()
@@ -152,7 +162,8 @@ def data(inpu,inpu1):
                 cerca = driver.find_element_by_class_name('xp__button')
                 cerca.click()
                 urlCorrenteHotel = (driver.current_url,)
-                date = driver.find_element_by_xpath('//*[@id="frm"]/div[3]/div/div[1]/div[1]/div/div/div[1]/div/div[2]').text
+                date = driver.find_element_by_xpath('//*[@id="frm"]/div[3]/div/div[1]/div[1]/div/div/div/div[2]').text
+                #date = driver.find_element_by_xpath('//*[@id="frm"]/div[3]/div/div[1]/div[1]/div/div/div[1]/div/div[2]').text
                 format = normalizzaData(date)
                 dataPernottamento = (format,)
                 cittaEstrazione = inpu

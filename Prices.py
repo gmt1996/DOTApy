@@ -85,6 +85,11 @@ mycursor.close()
 beta = 1
 try:
  for i in myresult:
+    try:
+        mainCoo = driver.find_element_by_xpath('//*[@id="onetrust-accept-btn-handler"]')
+        mainCoo.click()
+    except  WDE:
+        debug("NO main Cookies",2)
     debug(beta,2)
     driver.get(i[0])
     d = (i[1],)
@@ -134,7 +139,7 @@ try:
 
         def seleziona5km():
             try:
-                mainCoo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
+                mainCoo = driver.find_element_by_xpath('//*[@id="onetrust-accept-btn-handler"]')
                 mainCoo.click()
             except  WDE:
                 debug("NO main Cookies",2)
@@ -164,6 +169,11 @@ try:
             while(driver.find_element_by_xpath('//*[@id="search_results_table"]/div[4]/nav/ul/li[3]/a')):
                 try:
                     trovaHtPr()
+                    try:
+                        mainCoo = driver.find_element_by_xpath('//*[@id="onetrust-accept-btn-handler"]')
+                        mainCoo.click()
+                    except  WDE:
+                        debug("NO main Cookies",2)
                     try:
                         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
                         coo.click()

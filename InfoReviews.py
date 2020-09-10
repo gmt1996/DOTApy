@@ -29,8 +29,9 @@ import re
 import argparse
 
 options = webdriver.ChromeOptions()
+options.add_argument('--lang=it-IT')
+#options.add_experimental_option("prefs", {"intl.accept_languages": "it-IT"})
 #options.add_argument('headless')
-options.add_argument('--lang=it')
 options.add_argument('--log-level=3')
 
 driver = webdriver.Chrome( options = options)
@@ -205,6 +206,11 @@ def seleziona5km():
     km = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[3]/label/div')
     print('km')
     time.sleep(2)
+    try:
+        mainCoo = driver.find_element_by_xpath('//*[@id="onetrust-accept-btn-handler"]')
+        mainCoo.click()
+    except  WDE:
+        debug("NO main Cookies",2)
     km.click()
     time.sleep(2)
 
@@ -228,7 +234,8 @@ def estrazioneInfoHotel():
         debug("errore estrazione tipologia", 2)
     #estrazione stelle
     try:
-        stelle = driver.find_element_by_class_name('hp__hotel_ratings').text
+        stelle = driver.find_element_by_xpath('//*[@id="wrap-hotelpage-top"]/div[1]/span/span[1]/span/span/span').get_attribute('aria-label')
+        #stelle = driver.find_element_by_class_name('hp__hotel_ratings').text
         #stelle = driver.find_element_by_xpath('//*[@id="wrap-hotelpage-top"]/div[1]/span/span[1]/i/span').text
         ns = re.findall(r'\d', stelle)
         NumeroStelle = ns[0]
@@ -403,6 +410,11 @@ def normalizzaData(x):
 #funzione che se presenti accetta i coockie
 def accettaCookie ():
     try:
+        mainCoo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
+        mainCoo.click()
+    except  WDE:
+        debug("NO main Cookies",2)
+    try:
         coo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div[2]/a')
         coo.click()
     except WDE:
@@ -421,10 +433,20 @@ def pagSuccessiva():
     main_page = driver.current_window_handle
 
 def main():
+    try:
+        mainCoo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
+        mainCoo.click()
+    except  WDE:
+        debug("NO main Cookies",2)
     passo0 = driver.find_element_by_class_name('c-autocomplete__input')
     passo0.send_keys(args.c)
     passo0.send_keys(Keys.ENTER)
     time.sleep(3)
+    try:
+        mainCoo = driver.find_element_by_xpath('//*[@id="cookie_warning"]/div/div/div[2]/button')
+        mainCoo.click()
+    except  WDE:
+        debug("NO main Cookies",2)
     seleziona5km()
     try:
         while(driver.find_element_by_xpath('//*[@id="search_results_table"]/div[4]/nav/ul/li[3]/a')):
