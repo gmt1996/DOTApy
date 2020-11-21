@@ -80,108 +80,206 @@ connection = mysql.connector.connect(host = hostDB,
 
 #funzione per l'estrazione delle recensioni che si basa sull'argomento -nr per estrarne il numero selezionato
 def recen():
-    time.sleep(3)
+    time.sleep(5)
     allRec = driver.find_element_by_xpath('//*[@id="show_reviews_tab"]')
     allRec.click()
+    time.sleep(5)
     cust = driver.find_element_by_xpath('//*[@id="review_sort"]')
     cust.click()
+    time.sleep(1)
     recenti = driver.find_element_by_xpath('//*[@id="review_sort"]/option[2]')
     recenti.click()
     time.sleep(2)
-    next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')
-    numeroRecensioni = args.nr
-    while(numeroRecensioni>0):
-        time.sleep(1)
-        listaRec = driver.find_element_by_class_name('review_list')
-        numRec = listaRec.find_elements_by_class_name('review_list_new_item_block')
-        debug(len(numRec),2)
-		#estrazione del nome, nazione e testo delle recensioni scritte dagli utenti
-        for i in range(0,len(numRec)):
-            name = numRec[i].find_element_by_class_name('bui-avatar-block__title').text
-            title = numRec[i].find_element_by_class_name('c-review-block__title').text
-            nation = ''
-            try:
-                nation = numRec[i].find_element_by_class_name('bui-avatar-block__subtitle').text
-            except WDE:
-                debug('nazione non presente',0)
-            recens = numRec[i].find_element_by_class_name('c-review')
-            pos = recens.find_elements_by_class_name('c-review__row')
-            score = numRec[i].find_element_by_class_name('bui-review-score__badge').text
-            dataRec = numRec[i].find_element_by_class_name('c-review-block__date').text
-            Lang = numRec[i].find_element_by_class_name('c-review__body')
-            try:
-                LinguaRec = Lang.get_attribute('lang')
-            except WDE:
-                debug('Non è presente la lingua della recensione',0)
-            normalizzatore = 'Recensione: '
-            if normalizzatore in dataRec:
-                temp = dataRec.split(normalizzatore)
-                dataRec = ''.join(temp)
-                dataRecensioneNormalizzata = normalizzaData(dataRec)
-            debug("dataRecensioneNormalizzata",2)
-            rp = ''
-            rn = ''
-			#estrazione e normalizzazione delle recensioni positive rp e negative rn
-            try:
-                if(len(pos)>1):
-                    rp = pos[0].find_element_by_class_name('c-review__body').text
-                    rn = pos[1].find_element_by_class_name('c-review__body').text
-                    trad = 'Mostra traduzione'
-                    comm = 'Il cliente non ha lasciato un commento'
-                    piac = 'Cosa è piaciuto · '
-                    piacn = 'Cosa non è piaciuto · '
-                    if trad in rp:
-                        c = trad.split('Mostra traduzione')
-                        rp = ''.join(c)
-                    if comm in rp:
-                        c = comm.split('Il cliente non ha lasciato un commento')
-                        rn = ''.join(c)
-                    if piac in rp:
-                        c = piac.split('Cosa è piaciuto · ')
-                        rp = ''.join(c)
-                    if piacn in rn:
-                        c = piacn.split('Cosa non è piaciuto · ')
-                        rn = ''.join(c)
-                    debug(pos[1].text,2)
-                else:
-                    rp = pos[0].find_element_by_class_name('c-review__body').text
-                    comm = 'Il cliente non ha lasciato un commento'
-                    piac = 'Cosa è piaciuto · '
-                    if comm in rp:
-                        c = comm.split('Il cliente non ha lasciato un commento')
-                        rp = ''.join(c)
-                    if piac in rp:
-                        c = piac.split('Cosa è piaciuto ·')
-                        rp = ''.join(c)
-                    debug(pos[0].text,2)
-            except WDE:
-                debug("recensione non valida per l'estrazione", 2)
+    try:
+        next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')
+        numeroRecensioni = args.nr
+        while(numeroRecensioni>0):
+            time.sleep(1)
+            listaRec = driver.find_element_by_class_name('review_list')
+            numRec = listaRec.find_elements_by_class_name('review_list_new_item_block')
+            debug(len(numRec),2)
+			#estrazione del nome, nazione e testo delle recensioni scritte dagli utenti
+            for i in range(0,len(numRec)):
+                name = numRec[i].find_element_by_class_name('bui-avatar-block__title').text
+                title = numRec[i].find_element_by_class_name('c-review-block__title').text
+                nation = ''
+                try:
+                    nation = numRec[i].find_element_by_class_name('bui-avatar-block__subtitle').text
+                except WDE:
+                    debug('nazione non presente',0)
+                recens = numRec[i].find_element_by_class_name('c-review')
+                pos = recens.find_elements_by_class_name('c-review__row')
+                score = numRec[i].find_element_by_class_name('bui-review-score__badge').text
+                dataRec = numRec[i].find_element_by_class_name('c-review-block__date').text
+                Lang = numRec[i].find_element_by_class_name('c-review__body')
+                try:
+                    LinguaRec = Lang.get_attribute('lang')
+                except WDE:
+                    debug('Non è presente la lingua della recensione',0)
+                normalizzatore = 'Recensione: '
+                if normalizzatore in dataRec:
+                    temp = dataRec.split(normalizzatore)
+                    dataRec = ''.join(temp)
+                    dataRecensioneNormalizzata = normalizzaData(dataRec)
+                debug("dataRecensioneNormalizzata",2)
+                rp = ''
+                rn = ''
+				#estrazione e normalizzazione delle recensioni positive rp e negative rn
+                try:
+                    if(len(pos)>1):
+                        rp = pos[0].find_element_by_class_name('c-review__body').text
+                        rn = pos[1].find_element_by_class_name('c-review__body').text
+                        trad = 'Mostra traduzione'
+                        comm = 'Il cliente non ha lasciato un commento'
+                        piac = 'Cosa è piaciuto · '
+                        piacn = 'Cosa non è piaciuto · '
+                        if trad in rp:
+                            c = trad.split('Mostra traduzione')
+                            rp = ''.join(c)
+                        if comm in rp:
+                            c = comm.split('Il cliente non ha lasciato un commento')
+                            rn = ''.join(c)
+                        if piac in rp:
+                            c = piac.split('Cosa è piaciuto · ')
+                            rp = ''.join(c)
+                        if piacn in rn:
+                            c = piacn.split('Cosa non è piaciuto · ')
+                            rn = ''.join(c)
+                        debug(pos[1].text,2)
+                    else:
+                        rp = pos[0].find_element_by_class_name('c-review__body').text
+                        comm = 'Il cliente non ha lasciato un commento'
+                        piac = 'Cosa è piaciuto · '
+                        if comm in rp:
+                            c = comm.split('Il cliente non ha lasciato un commento')
+                            rp = ''.join(c)
+                        if piac in rp:
+                            c = piac.split('Cosa è piaciuto ·')
+                            rp = ''.join(c)
+                        debug(pos[0].text,2)
+                except WDE:
+                     debug("recensione non valida per l'estrazione", 2)
 
-            time.sleep(2)
-            try:
-                prin('ciao')
-                cursor = connection.cursor()
-                cursor.execute("SELECT max(IDHotel) from accomodation")
-                risultato = cursor.fetchone()
-                cursor.close()
-                mySql_insert_query = """INSERT INTO accomodationrecensioni (idhotel, nome, titolo, recensionePos, recensioneNeg, score, nazione, dataRecensione, LinguaRecensione)
-                                    VALUES
-                              (%s, %s, %s, %s, %s, %s, %s, %s, %s) """
-                cursor = connection.cursor()
-                result = cursor.execute(mySql_insert_query, (risultato[0],name,title,rp,rn,score,nation, dataRecensioneNormalizzata, LinguaRec))
-                connection.commit()
-                debug("Record inserted successfully into accomodationrecensioni table",1)
-                cursor.close()
+                time.sleep(2)
+                try:
 
-            except mysql.connector.Error as error:
-                debug("Failed to insert record into accomodationrecensioni table {}".format(error),1)
-        numeroRecensioni = numeroRecensioni - 1
-        try:
-            next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')
-            next.click()
-            time.sleep(2)
-        except:
-            break
+                    cursor = connection.cursor()
+                    cursor.execute("SELECT max(IDHotel) from accomodation")
+                    risultato = cursor.fetchone()
+                    cursor.close()
+                    mySql_insert_query = """INSERT INTO accomodationrecensioni (idhotel, nome, titolo, recensionePos, recensioneNeg, score, nazione, dataRecensione, LinguaRecensione)
+                                        VALUES
+                                  (%s, %s, %s, %s, %s, %s, %s, %s, %s) """
+                    cursor = connection.cursor()
+                    result = cursor.execute(mySql_insert_query, (risultato[0],name,title,rp,rn,score,nation, dataRecensioneNormalizzata, LinguaRec))
+                    connection.commit()
+                    debug("Record inserted successfully into accomodationrecensioni table",1)
+                    cursor.close()
+
+                except mysql.connector.Error as error:
+                    debug("Failed to insert record into accomodationrecensioni table {}".format(error),1)
+            numeroRecensioni = numeroRecensioni - 1
+            try:
+                next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')
+                next.click()
+                time.sleep(2)
+            except:
+                break
+    except:
+        next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[5]/div/div[1]/div/div[3]/a')
+        numeroRecensioni = args.nr
+        while(numeroRecensioni>0):
+            time.sleep(1)
+            listaRec = driver.find_element_by_class_name('review_list')
+            numRec = listaRec.find_elements_by_class_name('review_list_new_item_block')
+            debug(len(numRec),2)
+    		#estrazione del nome, nazione e testo delle recensioni scritte dagli utenti
+            for i in range(0,len(numRec)):
+                name = numRec[i].find_element_by_class_name('bui-avatar-block__title').text
+                title = numRec[i].find_element_by_class_name('c-review-block__title').text
+                nation = ''
+                try:
+                    nation = numRec[i].find_element_by_class_name('bui-avatar-block__subtitle').text
+                except WDE:
+                    debug('nazione non presente',0)
+                recens = numRec[i].find_element_by_class_name('c-review')
+                pos = recens.find_elements_by_class_name('c-review__row')
+                score = numRec[i].find_element_by_class_name('bui-review-score__badge').text
+                dataRec = numRec[i].find_elements_by_class_name('c-review-block__date')[1].text
+                Lang = numRec[i].find_element_by_class_name('c-review__body')
+                try:
+                    LinguaRec = Lang.get_attribute('lang')
+                except WDE:
+                    debug('Non è presente la lingua della recensione',0)
+                normalizzatore = 'Recensione: '
+                if normalizzatore in dataRec:
+                    temp = dataRec.split(normalizzatore)
+                    dataRec = ''.join(temp)
+                    dataRecensioneNormalizzata = normalizzaData(dataRec)
+                debug("dataRecensioneNormalizzata",2)
+                rp = ''
+                rn = ''
+    			#estrazione e normalizzazione delle recensioni positive rp e negative rn
+                try:
+                    if(len(pos)>1):
+                        rp = pos[0].find_element_by_class_name('c-review__body').text
+                        rn = pos[1].find_element_by_class_name('c-review__body').text
+                        trad = 'Mostra traduzione'
+                        comm = 'Il cliente non ha lasciato un commento'
+                        piac = 'Cosa è piaciuto · '
+                        piacn = 'Cosa non è piaciuto · '
+                        if trad in rp:
+                            c = trad.split('Mostra traduzione')
+                            rp = ''.join(c)
+                        if comm in rp:
+                            c = comm.split('Il cliente non ha lasciato un commento')
+                            rn = ''.join(c)
+                        if piac in rp:
+                            c = piac.split('Cosa è piaciuto · ')
+                            rp = ''.join(c)
+                        if piacn in rn:
+                            c = piacn.split('Cosa non è piaciuto · ')
+                            rn = ''.join(c)
+                        debug(pos[1].text,2)
+                    else:
+                        rp = pos[0].find_element_by_class_name('c-review__body').text
+                        comm = 'Il cliente non ha lasciato un commento'
+                        piac = 'Cosa è piaciuto · '
+                        if comm in rp:
+                            c = comm.split('Il cliente non ha lasciato un commento')
+                            rp = ''.join(c)
+                        if piac in rp:
+                            c = piac.split('Cosa è piaciuto ·')
+                            rp = ''.join(c)
+                        debug(pos[0].text,2)
+                except WDE:
+                    debug("recensione non valida per l'estrazione", 2)
+
+                time.sleep(2)
+                try:
+
+                    cursor = connection.cursor()
+                    cursor.execute("SELECT max(IDHotel) from accomodation")
+                    risultato = cursor.fetchone()
+                    cursor.close()
+                    mySql_insert_query = """INSERT INTO accomodationrecensioni (idhotel, nome, titolo, recensionePos, recensioneNeg, score, nazione, dataRecensione, LinguaRecensione)
+                                        VALUES
+                                  (%s, %s, %s, %s, %s, %s, %s, %s, %s) """
+                    cursor = connection.cursor()
+                    result = cursor.execute(mySql_insert_query, (risultato[0],name,title,rp,rn,score,nation, dataRecensioneNormalizzata, LinguaRec))
+                    connection.commit()
+                    debug("Record inserted successfully into accomodationrecensioni table",1)
+                    cursor.close()
+
+                except mysql.connector.Error as error:
+                    debug("Failed to insert record into accomodationrecensioni table {}".format(error),1)
+            numeroRecensioni = numeroRecensioni - 1
+            try:
+                next = driver.find_element_by_xpath('//*[@id="review_list_page_container"]/div[4]/div/div[1]/div/div[3]/a')
+                next.click()
+                time.sleep(2)
+            except:
+                break
     debug('fine recensioni',1)
 
 #funzione per aprire le pagine dei singoli hotel da dove verranno poi estratte le informazioni
@@ -190,7 +288,7 @@ def entraHotel():
     for i in range(0,len(numHt)):
         s = numHt[i].find_element_by_class_name('sr-hotel__name')
         pi = numHt[i].find_element_by_class_name('sr-hotel__name').text
-        print('ht')
+        debug('ht',2)
         global NomeHote
         NomeHote = (pi,)
         s.click()
@@ -204,7 +302,7 @@ def seleziona5km():
     #imposta la distanza a un km
     #km1 = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[1]/label/div')
     km = driver.find_element_by_xpath('//*[@id="filter_distance"]/div[2]/a[3]/label/div')
-    print('km')
+    debug('km',2)
     time.sleep(2)
     try:
         mainCoo = driver.find_element_by_xpath('//*[@id="onetrust-accept-btn-handler"]')
@@ -256,7 +354,7 @@ def estrazioneInfoHotel():
     except :
         hturl=[driver.current_url]
         debug("errore estrazione url", 0)
-    print('in')
+    debug('in',2)
     #estrazione della latitudine e della longitudine dal file javaScript
     javaScript = "return(booking.env.b_map_center_latitude)"
     js = driver.execute_script(javaScript)
